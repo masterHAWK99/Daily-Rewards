@@ -18,25 +18,12 @@ import java.sql.SQLException;
 public class Main extends JavaPlugin implements Listener {
 
     public SettingsManager settings = SettingsManager.getInstance();
-
-    public CooldownManager cdManager;
-
-    public CommandManager cmdManager;
-
-    public RewardManager rwdManager;
-
     public static boolean papi;
-
     public static Connection connection;
-
     public static String host;
-
     public static String database;
-
     public static String username;
-
     public static String password;
-
     public int port;
 
     public void onEnable() {
@@ -70,9 +57,11 @@ public class Main extends JavaPlugin implements Listener {
     }
 
     private void registerEvents() {
-        Bukkit.getPluginManager().registerEvents((Listener) new JoinManager(), (Plugin) this);
-        Bukkit.getPluginManager().registerEvents(this, (Plugin) this);
+        Bukkit.getPluginManager().registerEvents(new JoinManager(), this);
+        Bukkit.getPluginManager().registerEvents(this, this);
     }
+
+
 
     public void mysqlSetup() {
         host = SettingsManager.getConfig().getString("mysql.host-name");
@@ -93,14 +82,11 @@ public class Main extends JavaPlugin implements Listener {
             e.printStackTrace();
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Daily Rewards MySQL: Failed To Connected");
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Daily Rewards MySQL: Error 'SQLException'");
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED
-                    + "Daily Rewards MySQL: Your MySQL Configuration Information Is Invalid, Contact Halflove For Support");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Daily Rewards MySQL: Your MySQL Configuration Information Is Invalid");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Daily Rewards MySQL: Failed To Connected");
-            Bukkit.getConsoleSender()
-                    .sendMessage(ChatColor.RED + "Daily Rewards MySQL: Error 'ClassNotFoundException'");
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Daily Rewards MySQL: Contact Halflove For Support");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Daily Rewards MySQL: Failed To Connect");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Daily Rewards MySQL: Error 'ClassNotFoundException'");
         }
     }
 
