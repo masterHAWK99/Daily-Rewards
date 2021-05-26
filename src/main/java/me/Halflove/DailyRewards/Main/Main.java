@@ -39,7 +39,7 @@ public class Main extends JavaPlugin implements Listener {
         }
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             papi = true;
-            (new PAPIExtensions()).register();
+            new PAPIExtensions().register();
         } else {
             papi = false;
         }
