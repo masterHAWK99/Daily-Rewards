@@ -1,8 +1,5 @@
 package me.Halflove.DailyRewards.command;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import me.Halflove.DailyRewards.Main;
 import me.Halflove.DailyRewards.manager.MySQLManager;
 import me.Halflove.DailyRewards.manager.SettingsManager;
@@ -16,18 +13,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class AdminCommands implements CommandExecutor {
     private final Main plugin;
-
-    public static Connection connection;
-
-    public static String host;
-
-    public static String database;
-
-    public static String username;
-
-    public static String password;
-
-    public int port;
 
     public AdminCommands(Main plugin) {
         this.plugin = plugin;
@@ -61,7 +46,7 @@ public class AdminCommands implements CommandExecutor {
                         public void run() {
                             if (SettingsManager.getConfig().getBoolean("mysql.enabled")) {
                                 if (startmysql) {
-                                    AdminCommands.this.mysqlSetup();
+                                    MySQLManager.mysqlSetup();
                                     MySQLManager.createTable();
                                 } else {
                                     MySQLManager.createTable();
@@ -109,44 +94,5 @@ public class AdminCommands implements CommandExecutor {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
         }
         return true;
-    }
-
-    public void mysqlSetup() {
-        host = SettingsManager.getConfig().getString("mysql.host-name");
-        this.port = SettingsManager.getConfig().getInt("mysql.port");
-        database = SettingsManager.getConfig().getString("mysql.database");
-        username = SettingsManager.getConfig().getString("mysql.username");
-        password = SettingsManager.getConfig().getString("mysql.password");
-        try {
-            synchronized (this) {
-                if (getConnection() != null && !getConnection().isClosed()) {
-                    return;
-                }
-                Class.forName("com.mysql.jdbc.Driver");
-                setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" + this.port + "/" + database,
-                    username, password));
-                Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Daily Rewards MySQL: Successfully Connected");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Daily Rewards MySQL: Failed To Connected");
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Daily Rewards MySQL: Error 'SQLException'");
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED
-                + "Daily Rewards MySQL: Your MySQL Configuration Information Is Invalid, Contact Halflove For Support");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Daily Rewards MySQL: Failed To Connected");
-            Bukkit.getConsoleSender()
-                .sendMessage(ChatColor.RED + "Daily Rewards MySQL: Error 'ClassNotFoundException'");
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Daily Rewards MySQL: Contact Halflove For Support");
-        }
-    }
-
-    public Connection getConnection() {
-        return connection;
-    }
-
-    public void setConnection(Connection connection) {
-        AdminCommands.connection = connection;
     }
 }
