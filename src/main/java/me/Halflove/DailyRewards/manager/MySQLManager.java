@@ -1,10 +1,10 @@
-package me.Halflove.DailyRewards.Managers;
+package me.Halflove.DailyRewards.manager;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
-import me.Halflove.DailyRewards.Main.Main;
+import me.Halflove.DailyRewards.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

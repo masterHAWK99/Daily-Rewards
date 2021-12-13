@@ -1,11 +1,11 @@
-package me.Halflove.DailyRewards.Managers;
+package me.Halflove.DailyRewards.manager;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Scanner;
 import java.util.function.Consumer;
-import me.Halflove.DailyRewards.Main.Main;
+import me.Halflove.DailyRewards.Main;
 import org.bukkit.Bukkit;
 
 public class UpdateChecker {

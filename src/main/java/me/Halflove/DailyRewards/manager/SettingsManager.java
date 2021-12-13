@@ -1,4 +1,4 @@
-package me.Halflove.DailyRewards.Managers;
+package me.Halflove.DailyRewards.manager;
 
 import java.io.File;
 import java.io.IOException;

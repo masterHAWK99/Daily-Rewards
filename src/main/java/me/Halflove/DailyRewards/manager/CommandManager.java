@@ -1,6 +1,6 @@
-package me.Halflove.DailyRewards.Managers;
+package me.Halflove.DailyRewards.manager;
 
-import me.Halflove.DailyRewards.Main.Main;
+import me.Halflove.DailyRewards.Main;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

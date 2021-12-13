@@ -1,10 +1,10 @@
-package me.Halflove.DailyRewards.Managers;
+package me.Halflove.DailyRewards.manager;
 
 import com.google.common.base.Splitter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import me.Halflove.DailyRewards.Main.Main;
+import me.Halflove.DailyRewards.Main;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

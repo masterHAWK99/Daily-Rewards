@@ -1,11 +1,11 @@
-package me.Halflove.DailyRewards.Commands;
+package me.Halflove.DailyRewards.command;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import me.Halflove.DailyRewards.Main.Main;
-import me.Halflove.DailyRewards.Managers.MySQLManager;
-import me.Halflove.DailyRewards.Managers.SettingsManager;
+import me.Halflove.DailyRewards.Main;
+import me.Halflove.DailyRewards.manager.MySQLManager;
+import me.Halflove.DailyRewards.manager.SettingsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

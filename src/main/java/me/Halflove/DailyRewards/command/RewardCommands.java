@@ -1,10 +1,10 @@
-package me.Halflove.DailyRewards.Commands;
+package me.Halflove.DailyRewards.command;
 
-import me.Halflove.DailyRewards.Main.Main;
-import me.Halflove.DailyRewards.Managers.CooldownManager;
-import me.Halflove.DailyRewards.Managers.MySQLManager;
-import me.Halflove.DailyRewards.Managers.RewardManager;
-import me.Halflove.DailyRewards.Managers.SettingsManager;
+import me.Halflove.DailyRewards.Main;
+import me.Halflove.DailyRewards.manager.CooldownManager;
+import me.Halflove.DailyRewards.manager.MySQLManager;
+import me.Halflove.DailyRewards.manager.RewardManager;
+import me.Halflove.DailyRewards.manager.SettingsManager;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
