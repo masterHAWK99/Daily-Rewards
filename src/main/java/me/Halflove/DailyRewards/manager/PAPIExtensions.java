@@ -1,6 +1,7 @@
 package me.Halflove.DailyRewards.manager;
 
 import me.Halflove.DailyRewards.Main;
+import me.Halflove.DailyRewards.util.DateUtils;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
@@ -45,16 +46,16 @@ public class PAPIExtensions extends PlaceholderExpansion {
         }
         long millis = releaseip - current;
         if (identifier.equals("remaining_time")) {
-            return CooldownManager.getRemainingTime(millis);
+            return DateUtils.getRemainingTime(millis);
         }
         if (identifier.equals("remaining_hours")) {
-            return CooldownManager.getRemainingHour(millis);
+            return DateUtils.getRemainingHour(millis);
         }
         if (identifier.equals("remaining_minutes")) {
-            return CooldownManager.getRemainingMin(millis);
+            return DateUtils.getRemainingMin(millis);
         }
         if (identifier.equals("remaining_seconds")) {
-            return CooldownManager.getRemainingSec(millis);
+            return DateUtils.getRemainingSec(millis);
         }
         if (identifier.equals("player_test_qualification")) {
             boolean output;

@@ -6,6 +6,7 @@ import me.Halflove.DailyRewards.manager.MySQLManager;
 import me.Halflove.DailyRewards.manager.RewardManager;
 import me.Halflove.DailyRewards.manager.SettingsManager;
 import me.Halflove.DailyRewards.manager.UpdateChecker;
+import me.Halflove.DailyRewards.util.DateUtils;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -66,14 +67,14 @@ public class PlayerJoinListener implements Listener {
                                 }
                                 long millis = releaseip - current;
                                 String cdmsg = SettingsManager.getMsg().getString("cooldown-msg");
-                                cdmsg = cdmsg.replace("%time%", CooldownManager.getRemainingTime(millis));
-                                cdmsg = cdmsg.replace("%s%", CooldownManager.getRemainingSec(millis));
-                                cdmsg = cdmsg.replace("%m%", CooldownManager.getRemainingMin(millis));
-                                cdmsg = cdmsg.replace("%h%", CooldownManager.getRemainingHour(millis));
-                                cdmsg = cdmsg.replace("%time", CooldownManager.getRemainingTime(millis));
-                                cdmsg = cdmsg.replace("%s", CooldownManager.getRemainingSec(millis));
-                                cdmsg = cdmsg.replace("%m", CooldownManager.getRemainingMin(millis));
-                                cdmsg = cdmsg.replace("%h", CooldownManager.getRemainingHour(millis));
+                                cdmsg = cdmsg.replace("%time%", DateUtils.getRemainingTime(millis));
+                                cdmsg = cdmsg.replace("%s%", DateUtils.getRemainingSec(millis));
+                                cdmsg = cdmsg.replace("%m%", DateUtils.getRemainingMin(millis));
+                                cdmsg = cdmsg.replace("%h%", DateUtils.getRemainingHour(millis));
+                                cdmsg = cdmsg.replace("%time", DateUtils.getRemainingTime(millis));
+                                cdmsg = cdmsg.replace("%s", DateUtils.getRemainingSec(millis));
+                                cdmsg = cdmsg.replace("%m", DateUtils.getRemainingMin(millis));
+                                cdmsg = cdmsg.replace("%h", DateUtils.getRemainingHour(millis));
                                 if (!cdmsg.equalsIgnoreCase("")) {
                                     if (Main.papi) {
                                         cdmsg = PlaceholderAPI.setPlaceholders(player, cdmsg);
@@ -101,14 +102,14 @@ public class PlayerJoinListener implements Listener {
                             }
                             long millis = releaseip - current;
                             String cdmsg = SettingsManager.getMsg().getString("cooldown-msg");
-                            cdmsg = cdmsg.replace("%time%", CooldownManager.getRemainingTime(millis));
-                            cdmsg = cdmsg.replace("%s%", CooldownManager.getRemainingSec(millis));
-                            cdmsg = cdmsg.replace("%m%", CooldownManager.getRemainingMin(millis));
-                            cdmsg = cdmsg.replace("%h%", CooldownManager.getRemainingHour(millis));
-                            cdmsg = cdmsg.replace("%time", CooldownManager.getRemainingTime(millis));
-                            cdmsg = cdmsg.replace("%s", CooldownManager.getRemainingSec(millis));
-                            cdmsg = cdmsg.replace("%m", CooldownManager.getRemainingMin(millis));
-                            cdmsg = cdmsg.replace("%h", CooldownManager.getRemainingHour(millis));
+                            cdmsg = cdmsg.replace("%time%", DateUtils.getRemainingTime(millis));
+                            cdmsg = cdmsg.replace("%s%", DateUtils.getRemainingSec(millis));
+                            cdmsg = cdmsg.replace("%m%", DateUtils.getRemainingMin(millis));
+                            cdmsg = cdmsg.replace("%h%", DateUtils.getRemainingHour(millis));
+                            cdmsg = cdmsg.replace("%time", DateUtils.getRemainingTime(millis));
+                            cdmsg = cdmsg.replace("%s", DateUtils.getRemainingSec(millis));
+                            cdmsg = cdmsg.replace("%m", DateUtils.getRemainingMin(millis));
+                            cdmsg = cdmsg.replace("%h", DateUtils.getRemainingHour(millis));
                             if (!cdmsg.equalsIgnoreCase("")) {
                                 if (Main.papi) {
                                     cdmsg = PlaceholderAPI.setPlaceholders(player, cdmsg);
