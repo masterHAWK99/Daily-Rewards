@@ -20,12 +20,8 @@ public class Main extends JavaPlugin implements Listener {
 
     public static boolean papi;
     public static Connection connection;
-    public static String host;
-    public static String database;
-    public static String username;
-    public static String password;
+
     public SettingsManager settings = SettingsManager.getInstance();
-    public int port;
 
     public void onEnable() {
         getCommand("dailyrewards").setExecutor(new AdminCommands(this));
@@ -65,18 +61,19 @@ public class Main extends JavaPlugin implements Listener {
 
 
     public void mysqlSetup() {
-        host = SettingsManager.getConfig().getString("mysql.host-name");
-        this.port = SettingsManager.getConfig().getInt("mysql.port");
-        database = SettingsManager.getConfig().getString("mysql.database");
-        username = SettingsManager.getConfig().getString("mysql.username");
-        password = SettingsManager.getConfig().getString("mysql.password");
+        String host = SettingsManager.getConfig().getString("mysql.host-name");
+        int port = SettingsManager.getConfig().getInt("mysql.port");
+        String database = SettingsManager.getConfig().getString("mysql.database");
+        String username = SettingsManager.getConfig().getString("mysql.username");
+        String password = SettingsManager.getConfig().getString("mysql.password");
+
         try {
             synchronized (this) {
                 if (getConnection() != null && !getConnection().isClosed()) {
                     return;
                 }
                 Class.forName("com.mysql.jdbc.Driver");
-                setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" + this.port + "/" + database,
+                setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database,
                     username, password));
                 Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Daily Rewards MySQL: Successfully Connected");
             }
