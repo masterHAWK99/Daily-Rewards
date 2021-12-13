@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import me.Halflove.DailyRewards.command.AdminCommands;
 import me.Halflove.DailyRewards.command.RewardCommands;
-import me.Halflove.DailyRewards.manager.JoinManager;
+import me.Halflove.DailyRewards.listener.PlayerJoinListener;
 import me.Halflove.DailyRewards.manager.MySQLManager;
 import me.Halflove.DailyRewards.manager.PAPIExtensions;
 import me.Halflove.DailyRewards.manager.SettingsManager;
@@ -59,7 +59,7 @@ public class Main extends JavaPlugin implements Listener {
     }
 
     private void registerEvents() {
-        Bukkit.getPluginManager().registerEvents(new JoinManager(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), this);
         Bukkit.getPluginManager().registerEvents(this, this);
     }
 

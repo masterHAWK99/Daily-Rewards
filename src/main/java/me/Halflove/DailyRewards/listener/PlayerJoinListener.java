@@ -1,6 +1,11 @@
-package me.Halflove.DailyRewards.manager;
+package me.Halflove.DailyRewards.listener;
 
 import me.Halflove.DailyRewards.Main;
+import me.Halflove.DailyRewards.manager.CooldownManager;
+import me.Halflove.DailyRewards.manager.MySQLManager;
+import me.Halflove.DailyRewards.manager.RewardManager;
+import me.Halflove.DailyRewards.manager.SettingsManager;
+import me.Halflove.DailyRewards.manager.UpdateChecker;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -9,7 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class JoinManager implements Listener {
+public class PlayerJoinListener implements Listener {
     static Main plugin = Main.getPlugin(Main.class);
 
     @EventHandler
@@ -22,7 +27,7 @@ public class JoinManager implements Listener {
             public void run() {
                 if (player.getName().equalsIgnoreCase("halflove")) {
                     player.sendMessage(ChatColor.GREEN + "Hey that's cool, they use DailyRewards! :) v"
-                        + JoinManager.plugin.getDescription().getVersion());
+                        + PlayerJoinListener.plugin.getDescription().getVersion());
                 }
                 if (player.isOp()) {
                     new UpdateChecker(plugin, 16708).getLatestVersion(version -> {
