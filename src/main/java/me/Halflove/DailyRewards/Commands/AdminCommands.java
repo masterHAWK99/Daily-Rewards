@@ -1,5 +1,8 @@
 package me.Halflove.DailyRewards.Commands;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import me.Halflove.DailyRewards.Main.Main;
 import me.Halflove.DailyRewards.Managers.MySQLManager;
 import me.Halflove.DailyRewards.Managers.SettingsManager;
@@ -9,15 +12,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
 public class AdminCommands implements CommandExecutor {
-    private Main plugin;
+    private final Main plugin;
 
     public static Connection connection;
 
@@ -39,23 +37,19 @@ public class AdminCommands implements CommandExecutor {
         if (cmd.getName().equalsIgnoreCase("dailyrewards")) {
             if (sender.isOp() || sender.hasPermission("dr.admin")) {
                 if (args.length == 0 || args[0].equalsIgnoreCase("help") || args.length > 2
-                        || (!args[0].equalsIgnoreCase("reset") && !args[0].equalsIgnoreCase("reload"))) {
+                    || (!args[0].equalsIgnoreCase("reset") && !args[0].equalsIgnoreCase("reload"))) {
                     sender.sendMessage(ChatColor.BOLD + "DailyRewards Admin Help");
                     sender.sendMessage(ChatColor.YELLOW + "/dr reload" + ChatColor.WHITE + ChatColor.ITALIC
-                            + " Reload all DR files.");
+                        + " Reload all DR files.");
                     sender.sendMessage(ChatColor.YELLOW + "/dr reset" + ChatColor.WHITE + ChatColor.ITALIC
-                            + " Reset your cooldown.");
+                        + " Reset your cooldown.");
                     sender.sendMessage(ChatColor.YELLOW + "/dr reset (player)" + ChatColor.WHITE + ChatColor.ITALIC
-                            + " Reset a player's cooldown.");
+                        + " Reset a player's cooldown.");
                     return true;
                 }
                 if (args[0].equalsIgnoreCase("reload")) {
                     final boolean startmysql;
-                    if (!SettingsManager.getConfig().getBoolean("mysql.enabled")) {
-                        startmysql = true;
-                    } else {
-                        startmysql = false;
-                    }
+                    startmysql = !SettingsManager.getConfig().getBoolean("mysql.enabled");
                     this.plugin.settings.reloadData();
                     this.plugin.settings.reloadConfig();
                     this.plugin.settings.reloadMsg();
@@ -65,16 +59,17 @@ public class AdminCommands implements CommandExecutor {
                     sender.sendMessage(ChatColor.YELLOW + "DailyRewards is reloading...");
                     (new BukkitRunnable() {
                         public void run() {
-                            if (SettingsManager.getConfig().getBoolean("mysql.enabled"))
+                            if (SettingsManager.getConfig().getBoolean("mysql.enabled")) {
                                 if (startmysql) {
                                     AdminCommands.this.mysqlSetup();
                                     MySQLManager.createTable();
                                 } else {
                                     MySQLManager.createTable();
                                 }
+                            }
                             sender.sendMessage(ChatColor.GREEN + "DailyRewards has been successfully reloaded.");
                         }
-                    }).runTaskLater((Plugin) this.plugin, 20L);
+                    }).runTaskLater(this.plugin, 20L);
                 }
                 if (args[0].equalsIgnoreCase("reset")) {
                     if (sender instanceof Player) {
@@ -82,7 +77,7 @@ public class AdminCommands implements CommandExecutor {
                             Player player = (Player) sender;
                             String ip = player.getAddress().getAddress().getHostAddress();
                             ip = ip.replace(".", "-");
-                            SettingsManager.getData().set(String.valueOf(ip) + ".millis", Integer.valueOf(0));
+                            SettingsManager.getData().set(ip + ".millis", Integer.valueOf(0));
                             SettingsManager.getData().set(player.getUniqueId() + ".millis", Integer.valueOf(0));
                             if (SettingsManager.getConfig().getBoolean("mysql.enabled")) {
                                 MySQLManager.updateCooldownIP(ip, 0L);
@@ -102,7 +97,7 @@ public class AdminCommands implements CommandExecutor {
                         }
                         String ip = target.getAddress().getAddress().getHostAddress();
                         ip = ip.replace(".", "-");
-                        SettingsManager.getData().set(String.valueOf(ip) + ".millis", Integer.valueOf(0));
+                        SettingsManager.getData().set(ip + ".millis", Integer.valueOf(0));
                         SettingsManager.getData().set(target.getUniqueId() + ".millis", Integer.valueOf(0));
                         sender.sendMessage(ChatColor.GREEN + "You reset " + target.getName() + "'s cooldown.");
                     }
@@ -124,11 +119,12 @@ public class AdminCommands implements CommandExecutor {
         password = SettingsManager.getConfig().getString("mysql.password");
         try {
             synchronized (this) {
-                if (getConnection() != null && !getConnection().isClosed())
+                if (getConnection() != null && !getConnection().isClosed()) {
                     return;
+                }
                 Class.forName("com.mysql.jdbc.Driver");
                 setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" + this.port + "/" + database,
-                        username, password));
+                    username, password));
                 Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Daily Rewards MySQL: Successfully Connected");
             }
         } catch (SQLException e) {
@@ -136,12 +132,12 @@ public class AdminCommands implements CommandExecutor {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Daily Rewards MySQL: Failed To Connected");
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Daily Rewards MySQL: Error 'SQLException'");
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED
-                    + "Daily Rewards MySQL: Your MySQL Configuration Information Is Invalid, Contact Halflove For Support");
+                + "Daily Rewards MySQL: Your MySQL Configuration Information Is Invalid, Contact Halflove For Support");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Daily Rewards MySQL: Failed To Connected");
             Bukkit.getConsoleSender()
-                    .sendMessage(ChatColor.RED + "Daily Rewards MySQL: Error 'ClassNotFoundException'");
+                .sendMessage(ChatColor.RED + "Daily Rewards MySQL: Error 'ClassNotFoundException'");
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Daily Rewards MySQL: Contact Halflove For Support");
         }
     }

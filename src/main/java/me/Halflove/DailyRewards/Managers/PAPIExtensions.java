@@ -5,7 +5,7 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
 public class PAPIExtensions extends PlaceholderExpansion {
-    static Main plugin = (Main) Main.getPlugin(Main.class);
+    static Main plugin = Main.getPlugin(Main.class);
 
     public boolean persist() {
         return true;
@@ -41,17 +41,21 @@ public class PAPIExtensions extends PlaceholderExpansion {
         } else if (!SettingsManager.getConfig().getBoolean("savetoip")) {
             releaseip = SettingsManager.getData().getLong(player.getUniqueId() + ".millis");
         } else {
-            releaseip = SettingsManager.getData().getLong(String.valueOf(ip) + ".millis");
+            releaseip = SettingsManager.getData().getLong(ip + ".millis");
         }
         long millis = releaseip - current;
-        if (identifier.equals("remaining_time"))
+        if (identifier.equals("remaining_time")) {
             return CooldownManager.getRemainingTime(millis);
-        if (identifier.equals("remaining_hours"))
+        }
+        if (identifier.equals("remaining_hours")) {
             return CooldownManager.getRemainingHour(millis);
-        if (identifier.equals("remaining_minutes"))
+        }
+        if (identifier.equals("remaining_minutes")) {
             return CooldownManager.getRemainingMin(millis);
-        if (identifier.equals("remaining_seconds"))
+        }
+        if (identifier.equals("remaining_seconds")) {
             return CooldownManager.getRemainingSec(millis);
+        }
         if (identifier.equals("player_test_qualification")) {
             boolean output;
             if (!SettingsManager.getConfig().getBoolean("savetoip")) {
@@ -59,14 +63,17 @@ public class PAPIExtensions extends PlaceholderExpansion {
             } else {
                 output = CooldownManager.getAllowRewardUUID(player);
             }
-            if (output)
+            if (output) {
                 return SettingsManager.getMsg().getString("PlaceholderAPI.reward_available");
+            }
             return SettingsManager.getMsg().getString("PlaceholderAPI.no_rewards");
         }
-        if (identifier.equals("player_reward_available"))
+        if (identifier.equals("player_reward_available")) {
             return SettingsManager.getMsg().getString("PlaceholderAPI.reward_available");
-        if (identifier.equals("player_no_rewards"))
+        }
+        if (identifier.equals("player_no_rewards")) {
             return SettingsManager.getMsg().getString("PlaceholderAPI.no_rewards");
+        }
         return null;
     }
 }

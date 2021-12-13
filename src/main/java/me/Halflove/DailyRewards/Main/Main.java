@@ -1,41 +1,43 @@
 package me.Halflove.DailyRewards.Main;
 
-import me.Halflove.DailyRewards.Commands.AdminCommands;
-import me.Halflove.DailyRewards.Commands.RewardCommands;
-import me.Halflove.DailyRewards.Managers.*;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import me.Halflove.DailyRewards.Commands.AdminCommands;
+import me.Halflove.DailyRewards.Commands.RewardCommands;
+import me.Halflove.DailyRewards.Managers.JoinManager;
+import me.Halflove.DailyRewards.Managers.MySQLManager;
+import me.Halflove.DailyRewards.Managers.PAPIExtensions;
+import me.Halflove.DailyRewards.Managers.SettingsManager;
+import me.Halflove.DailyRewards.Managers.UpdateChecker;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin implements Listener {
 
-    public SettingsManager settings = SettingsManager.getInstance();
     public static boolean papi;
     public static Connection connection;
     public static String host;
     public static String database;
     public static String username;
     public static String password;
+    public SettingsManager settings = SettingsManager.getInstance();
     public int port;
 
     public void onEnable() {
-        getCommand("dailyrewards").setExecutor((CommandExecutor) new AdminCommands(this));
-        getCommand("reward").setExecutor((CommandExecutor) new RewardCommands());
-        this.settings.setup((Plugin) this);
+        getCommand("dailyrewards").setExecutor(new AdminCommands(this));
+        getCommand("reward").setExecutor(new RewardCommands());
+        this.settings.setup(this);
         registerEvents();
         if (SettingsManager.getConfig().getBoolean("mysql.enabled")) {
             mysqlSetup();
             MySQLManager.createTable();
-            for (Player player : Bukkit.getOnlinePlayers())
+            for (Player player : Bukkit.getOnlinePlayers()) {
                 MySQLManager.createPlayer(player);
+            }
         }
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             papi = true;
@@ -45,7 +47,7 @@ public class Main extends JavaPlugin implements Listener {
         }
 
         new UpdateChecker(this, 16708).getLatestVersion(version -> {
-            if(this.getDescription().getVersion().equalsIgnoreCase(version)) {
+            if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
                 getLogger().info("Plugin is up to date.");
             } else {
                 getLogger().severe("*** Daily Rewards is Outdated! ***");
@@ -62,7 +64,6 @@ public class Main extends JavaPlugin implements Listener {
     }
 
 
-
     public void mysqlSetup() {
         host = SettingsManager.getConfig().getString("mysql.host-name");
         this.port = SettingsManager.getConfig().getInt("mysql.port");
@@ -71,11 +72,12 @@ public class Main extends JavaPlugin implements Listener {
         password = SettingsManager.getConfig().getString("mysql.password");
         try {
             synchronized (this) {
-                if (getConnection() != null && !getConnection().isClosed())
+                if (getConnection() != null && !getConnection().isClosed()) {
                     return;
+                }
                 Class.forName("com.mysql.jdbc.Driver");
                 setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" + this.port + "/" + database,
-                        username, password));
+                    username, password));
                 Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Daily Rewards MySQL: Successfully Connected");
             }
         } catch (SQLException e) {

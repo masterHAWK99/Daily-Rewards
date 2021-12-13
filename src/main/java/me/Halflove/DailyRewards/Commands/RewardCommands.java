@@ -15,8 +15,9 @@ import org.bukkit.entity.Player;
 public class RewardCommands implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Player player = (Player) sender;
-        if (cmd.getName().equalsIgnoreCase("reward"))
+        if (cmd.getName().equalsIgnoreCase("reward")) {
             onCommand(player);
+        }
         return true;
     }
 
@@ -29,15 +30,16 @@ public class RewardCommands implements CommandExecutor {
                     long releaseip;
                     String norewards = SettingsManager.getMsg().getString("no-rewards");
                     if (!norewards.equalsIgnoreCase("")) {
-                        if (Main.papi)
+                        if (Main.papi) {
                             norewards = PlaceholderAPI.setPlaceholders(player, norewards);
+                        }
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', norewards));
                     }
                     long current = System.currentTimeMillis();
                     if (SettingsManager.getConfig().getBoolean("mysql.enabled")) {
                         releaseip = MySQLManager.getCooldownIP(ip);
                     } else {
-                        releaseip = SettingsManager.getData().getLong(String.valueOf(ip) + ".millis");
+                        releaseip = SettingsManager.getData().getLong(ip + ".millis");
                     }
                     long millis = releaseip - current;
                     String cdmsg = SettingsManager.getMsg().getString("cooldown-msg");
@@ -50,8 +52,9 @@ public class RewardCommands implements CommandExecutor {
                     cdmsg = cdmsg.replace("%m", CooldownManager.getRemainingMin(millis));
                     cdmsg = cdmsg.replace("%h", CooldownManager.getRemainingHour(millis));
                     if (!cdmsg.equalsIgnoreCase("")) {
-                        if (Main.papi)
+                        if (Main.papi) {
                             cdmsg = PlaceholderAPI.setPlaceholders(player, cdmsg);
+                        }
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', cdmsg));
                     }
                     RewardManager.noReward(player);
@@ -62,8 +65,9 @@ public class RewardCommands implements CommandExecutor {
                 long releaseip;
                 String norewards = SettingsManager.getMsg().getString("no-rewards");
                 if (!norewards.equalsIgnoreCase("")) {
-                    if (Main.papi)
+                    if (Main.papi) {
                         norewards = PlaceholderAPI.setPlaceholders(player, norewards);
+                    }
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', norewards));
                 }
                 long current = System.currentTimeMillis();
@@ -83,8 +87,9 @@ public class RewardCommands implements CommandExecutor {
                 cdmsg = cdmsg.replace("%m", CooldownManager.getRemainingMin(millis));
                 cdmsg = cdmsg.replace("%h", CooldownManager.getRemainingHour(millis));
                 if (!cdmsg.equalsIgnoreCase("")) {
-                    if (Main.papi)
+                    if (Main.papi) {
                         cdmsg = PlaceholderAPI.setPlaceholders(player, cdmsg);
+                    }
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', cdmsg));
                 }
                 RewardManager.noReward(player);
@@ -94,8 +99,9 @@ public class RewardCommands implements CommandExecutor {
         } else {
             String msg = SettingsManager.getMsg().getString("no-permission");
             if (!msg.equalsIgnoreCase("")) {
-                if (Main.papi)
+                if (Main.papi) {
                     msg = PlaceholderAPI.setPlaceholders(player, msg);
+                }
                 msg = msg.replace("%player", player.getName());
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
             }

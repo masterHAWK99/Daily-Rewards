@@ -1,16 +1,15 @@
 package me.Halflove.DailyRewards.Managers;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SettingsManager {
     static SettingsManager instance = new SettingsManager();
@@ -83,24 +82,27 @@ public class SettingsManager {
         config.addDefault("rewards.advanced.broadcast", "&aRewards&f: %player claimed the &eAdvanced&f Daily Reward!");
         config.addDefault("rewards.advanced.commands", command2);
         saveConfig();
-        if (!p.getDataFolder().exists())
+        if (!p.getDataFolder().exists()) {
             p.getDataFolder().mkdir();
+        }
         dfile = new File(p.getDataFolder(), "data.yml");
-        if (!dfile.exists())
+        if (!dfile.exists()) {
             try {
                 dfile.createNewFile();
             } catch (IOException e) {
                 Bukkit.getServer().getLogger().severe(ChatColor.RED + "Could not create data.yml!");
             }
-        data = (FileConfiguration) YamlConfiguration.loadConfiguration(dfile);
+        }
+        data = YamlConfiguration.loadConfiguration(dfile);
         mfile = new File(p.getDataFolder(), "messages.yml");
-        if (!mfile.exists())
+        if (!mfile.exists()) {
             try {
                 mfile.createNewFile();
             } catch (IOException e) {
                 Bukkit.getServer().getLogger().severe(ChatColor.RED + "Could not create messages.yml!");
             }
-        msg = (FileConfiguration) YamlConfiguration.loadConfiguration(mfile);
+        }
+        msg = YamlConfiguration.loadConfiguration(mfile);
         msg.options().copyDefaults(true);
         msg.addDefault("no-rewards", "&aRewards&f: &fYou do not have any available rewards at the moment.");
         msg.addDefault("cooldown-msg", "&aRewards&f: &fTime until next reward: %time%");
@@ -124,7 +126,7 @@ public class SettingsManager {
     }
 
     public void reloadMsg() {
-        msg = (FileConfiguration) YamlConfiguration.loadConfiguration(mfile);
+        msg = YamlConfiguration.loadConfiguration(mfile);
     }
 
     public static FileConfiguration getData() {
@@ -140,7 +142,7 @@ public class SettingsManager {
     }
 
     public void reloadData() {
-        data = (FileConfiguration) YamlConfiguration.loadConfiguration(dfile);
+        data = YamlConfiguration.loadConfiguration(dfile);
     }
 
     public static FileConfiguration getConfig() {
@@ -156,7 +158,7 @@ public class SettingsManager {
     }
 
     public void reloadConfig() {
-        config = (FileConfiguration) YamlConfiguration.loadConfiguration(cfile);
+        config = YamlConfiguration.loadConfiguration(cfile);
     }
 
     public PluginDescriptionFile getDesc() {

@@ -11,7 +11,7 @@ public class CooldownManager {
         if (SettingsManager.getConfig().getBoolean("mysql.enabled")) {
             millis = MySQLManager.getCooldownIP(ip);
         } else {
-            millis = SettingsManager.getData().getLong(String.valueOf(ip) + ".millis");
+            millis = SettingsManager.getData().getLong(ip + ".millis");
         }
         return (current > millis);
     }
@@ -45,7 +45,7 @@ public class CooldownManager {
     public static long getStreakIP(Player player) {
         String ip = player.getAddress().getAddress().getHostAddress();
         ip = ip.replace(".", "-");
-        return SettingsManager.getData().getLong(String.valueOf(ip) + ".reset");
+        return SettingsManager.getData().getLong(ip + ".reset");
     }
 
     public static long getTime(Player player) {
@@ -55,7 +55,7 @@ public class CooldownManager {
     public static long getTimeip(Player player) {
         String ip = player.getAddress().getAddress().getHostAddress();
         ip = ip.replace(".", "-");
-        return SettingsManager.getData().getLong(String.valueOf(ip) + ".millis");
+        return SettingsManager.getData().getLong(ip + ".millis");
     }
 
     public static String formatTime(long secs) {
@@ -73,39 +73,40 @@ public class CooldownManager {
         }
         if (hours != 0L) {
             if (hours > 1L) {
-                str = String.valueOf(hours) + " Hours";
+                str = hours + " Hours";
             } else if (minutes > 61L) {
-                str = String.valueOf(hours) + " Hour " + minutes + " Minutes";
+                str = hours + " Hour " + minutes + " Minutes";
             } else if (minutes == 61L) {
-                str = String.valueOf(hours) + " Hour " + minutes + " Minute";
+                str = hours + " Hour " + minutes + " Minute";
             } else {
-                str = String.valueOf(hours) + " Hour";
+                str = hours + " Hour";
             }
         } else if (minutes != 0L) {
             if (seconds == 0L) {
                 if (minutes == 1L) {
-                    str = String.valueOf(minutes) + " Minute";
+                    str = minutes + " Minute";
                 } else {
-                    str = String.valueOf(minutes) + " Minutes";
+                    str = minutes + " Minutes";
                 }
             } else if (minutes == 1L) {
                 if (seconds == 1L) {
-                    str = String.valueOf(minutes) + " Minute " + seconds + " Second";
+                    str = minutes + " Minute " + seconds + " Second";
                 } else {
-                    str = String.valueOf(minutes) + " Minute " + seconds + " Seconds";
+                    str = minutes + " Minute " + seconds + " Seconds";
                 }
             } else if (seconds == 1L) {
-                str = String.valueOf(minutes) + " Minutes " + seconds + " Second";
+                str = minutes + " Minutes " + seconds + " Second";
             } else {
-                str = String.valueOf(minutes) + " Minutes " + seconds + " Seconds";
+                str = minutes + " Minutes " + seconds + " Seconds";
             }
         } else if (seconds == 1L) {
-            str = String.valueOf(seconds) + " Second";
+            str = seconds + " Second";
         } else {
-            str = String.valueOf(seconds) + " Seconds";
+            str = seconds + " Seconds";
         }
-        if (secs <= 0L)
+        if (secs <= 0L) {
             str = "0 Seconds";
+        }
         return str;
     }
 
@@ -121,8 +122,9 @@ public class CooldownManager {
             seconds -= 60L;
             minutes++;
         }
-        while (minutes > 60L)
+        while (minutes > 60L) {
             minutes -= 60L;
+        }
         return (new StringBuilder(String.valueOf(seconds))).toString();
     }
 
@@ -133,8 +135,9 @@ public class CooldownManager {
             seconds -= 60L;
             minutes++;
         }
-        while (minutes > 60L)
+        while (minutes > 60L) {
             minutes -= 60L;
+        }
         return (new StringBuilder(String.valueOf(minutes))).toString();
     }
 
