@@ -34,30 +34,52 @@ public class RewardManager {
             player.playSound(player.getLocation(), Sound.valueOf(sound), volume, pitch);
         }
         for (String prize : SettingsManager.getConfig().getConfigurationSection("rewards").getKeys(false)) {
+            if (SettingsManager.getConfig().getBoolean("rewards." + prize + ".permission")
+                && !player.hasPermission("dr." + SettingsManager.getConfig().getString("rewards." + prize + ".name"))) {
+                continue;
+            }
+
             long toSet = Math.abs(System.currentTimeMillis())
                 + Math.abs(SettingsManager.getConfig().getInt("cooldown"));
             CooldownManager.updateTime(player, toSet);
             SettingsManager.saveData();
-            if (!SettingsManager.getConfig().getBoolean("rewards." + prize + ".permission")) {
-                String claim = SettingsManager.getConfig().getString("rewards." + prize + ".claim-message");
-                if (!claim.equalsIgnoreCase("")) {
-                    if (Main.papi) {
-                        claim = PlaceholderAPI.setPlaceholders(player, claim);
-                    }
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', claim));
+
+            String claim = SettingsManager.getConfig().getString("rewards." + prize + ".claim-message");
+            if (!claim.equalsIgnoreCase("")) {
+                if (Main.papi) {
+                    claim = PlaceholderAPI.setPlaceholders(player, claim);
                 }
-                if (!SettingsManager.getConfig().getString("rewards." + prize + ".broadcast").equalsIgnoreCase("")) {
-                    String msg = SettingsManager.getConfig().getString("rewards." + prize + ".broadcast");
-                    msg = msg.replace("%player", player.getName());
-                    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', msg));
-                }
-                (new BukkitRunnable() {
-                    public void run() {
-                        if (SettingsManager.getConfig().getBoolean("rewards." + prize + ".random")) {
-                            List<String> commandList = SettingsManager.getConfig()
-                                .getStringList("rewards." + prize + ".commands");
-                            int index = RewardManager.r.nextInt(commandList.size());
-                            String selectedCommand = commandList.get(index);
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', claim));
+            }
+            if (!SettingsManager.getConfig().getString("rewards." + prize + ".broadcast").equalsIgnoreCase("")) {
+                String msg = SettingsManager.getConfig().getString("rewards." + prize + ".broadcast");
+                msg = msg.replace("%player", player.getName());
+                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', msg));
+            }
+            new BukkitRunnable() {
+                public void run() {
+                    if (SettingsManager.getConfig().getBoolean("rewards." + prize + ".random")) {
+                        List<String> commandList = SettingsManager.getConfig()
+                            .getStringList("rewards." + prize + ".commands");
+                        int index = RewardManager.r.nextInt(commandList.size());
+                        String selectedCommand = commandList.get(index);
+                        selectedCommand = selectedCommand.replace("%player", player.getName());
+                        if (Main.papi) {
+                            selectedCommand = PlaceholderAPI.setPlaceholders(player, selectedCommand);
+                        }
+                        if (selectedCommand.contains(";")) {
+                            List<String> split = Splitter.on(";").splitToList(selectedCommand);
+                            for (String finalcommand : split) {
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalcommand);
+                            }
+                        } else {
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), selectedCommand);
+                        }
+                    } else {
+                        Iterator<String> iterator = SettingsManager.getConfig()
+                            .getStringList("rewards." + prize + ".commands").iterator();
+                        while (iterator.hasNext()) {
+                            String selectedCommand = iterator.next();
                             selectedCommand = selectedCommand.replace("%player", player.getName());
                             if (Main.papi) {
                                 selectedCommand = PlaceholderAPI.setPlaceholders(player, selectedCommand);
@@ -67,86 +89,13 @@ public class RewardManager {
                                 for (String finalcommand : split) {
                                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalcommand);
                                 }
-                            } else {
-                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), selectedCommand);
+                                continue;
                             }
-                        } else {
-                            Iterator<String> iterator = SettingsManager.getConfig()
-                                .getStringList("rewards." + prize + ".commands").iterator();
-                            while (iterator.hasNext()) {
-                                String selectedCommand = iterator.next();
-                                selectedCommand = selectedCommand.replace("%player", player.getName());
-                                if (Main.papi) {
-                                    selectedCommand = PlaceholderAPI.setPlaceholders(player, selectedCommand);
-                                }
-                                if (selectedCommand.contains(";")) {
-                                    List<String> split = Splitter.on(";").splitToList(selectedCommand);
-                                    for (String finalcommand : split) {
-                                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalcommand);
-                                    }
-                                    continue;
-                                }
-                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), selectedCommand);
-                            }
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), selectedCommand);
                         }
                     }
-                }).runTaskLater(plugin, 3L);
-                continue;
-            }
-            if (player.hasPermission("dr." + SettingsManager.getConfig().getString("rewards." + prize + ".name"))) {
-                String claim = SettingsManager.getConfig().getString("rewards." + prize + ".claim-message");
-                if (!claim.equalsIgnoreCase("")) {
-                    if (Main.papi) {
-                        claim = PlaceholderAPI.setPlaceholders(player, claim);
-                    }
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', claim));
                 }
-                if (!SettingsManager.getConfig().getString("rewards." + prize + ".broadcast").equalsIgnoreCase("")) {
-                    String msg = SettingsManager.getConfig().getString("rewards." + prize + ".broadcast");
-                    msg = msg.replace("%player", player.getName());
-                    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', msg));
-                }
-                (new BukkitRunnable() {
-                    public void run() {
-                        if (SettingsManager.getConfig().getBoolean("rewards." + prize + ".random")) {
-                            List<String> commandList = SettingsManager.getConfig()
-                                .getStringList("rewards." + prize + ".commands");
-                            int index = RewardManager.r.nextInt(commandList.size());
-                            String selectedCommand = commandList.get(index);
-                            selectedCommand = selectedCommand.replace("%player", player.getName());
-                            if (Main.papi) {
-                                selectedCommand = PlaceholderAPI.setPlaceholders(player, selectedCommand);
-                            }
-                            if (selectedCommand.contains(";")) {
-                                List<String> split = Splitter.on(";").splitToList(selectedCommand);
-                                for (String finalcommand : split) {
-                                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalcommand);
-                                }
-                            } else {
-                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), selectedCommand);
-                            }
-                        } else {
-                            Iterator<String> iterator = SettingsManager.getConfig()
-                                .getStringList("rewards." + prize + ".commands").iterator();
-                            while (iterator.hasNext()) {
-                                String selectedCommand = iterator.next();
-                                selectedCommand = selectedCommand.replace("%player", player.getName());
-                                if (Main.papi) {
-                                    selectedCommand = PlaceholderAPI.setPlaceholders(player, selectedCommand);
-                                }
-                                if (selectedCommand.contains(";")) {
-                                    List<String> split = Splitter.on(";").splitToList(selectedCommand);
-                                    for (String finalcommand : split) {
-                                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalcommand);
-                                    }
-                                    continue;
-                                }
-                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), selectedCommand);
-                            }
-                        }
-                    }
-                }).runTaskLater(plugin, 3L);
-            }
+            }.runTaskLater(plugin, 3L);
         }
     }
 }
