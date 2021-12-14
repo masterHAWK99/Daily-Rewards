@@ -1,6 +1,7 @@
 package me.Halflove.DailyRewards.command;
 
 import me.Halflove.DailyRewards.Main;
+import me.Halflove.DailyRewards.manager.CooldownManager;
 import me.Halflove.DailyRewards.manager.MySQLManager;
 import me.Halflove.DailyRewards.manager.SettingsManager;
 import org.bukkit.Bukkit;
@@ -60,14 +61,7 @@ public class AdminCommands implements CommandExecutor {
                     if (sender instanceof Player) {
                         if (args.length == 1) {
                             Player player = (Player) sender;
-                            String ip = player.getAddress().getAddress().getHostAddress();
-                            ip = ip.replace(".", "-");
-                            SettingsManager.getData().set(ip + ".millis", Integer.valueOf(0));
-                            SettingsManager.getData().set(player.getUniqueId() + ".millis", Integer.valueOf(0));
-                            if (SettingsManager.getConfig().getBoolean("mysql.enabled")) {
-                                MySQLManager.updateCooldownIP(ip, 0L);
-                                MySQLManager.updateCooldownUUID(player.getUniqueId(), 0L);
-                            }
+                            CooldownManager.updateTime(player);
                             sender.sendMessage(ChatColor.GREEN + "You reset your cooldown.");
                         }
                     } else {
@@ -80,10 +74,7 @@ public class AdminCommands implements CommandExecutor {
                             sender.sendMessage(ChatColor.RED + "The specified player is offline.");
                             return true;
                         }
-                        String ip = target.getAddress().getAddress().getHostAddress();
-                        ip = ip.replace(".", "-");
-                        SettingsManager.getData().set(ip + ".millis", Integer.valueOf(0));
-                        SettingsManager.getData().set(target.getUniqueId() + ".millis", Integer.valueOf(0));
+                        CooldownManager.updateTime(target);
                         sender.sendMessage(ChatColor.GREEN + "You reset " + target.getName() + "'s cooldown.");
                     }
                 }

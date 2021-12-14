@@ -58,5 +58,17 @@ public class CooldownManager {
         ip = ip.replace(".", "-");
         return SettingsManager.getData().getLong(ip + ".reset");
     }
+
+    public static void updateTime(Player player) {
+        String ip = player.getAddress().getAddress().getHostAddress();
+        ip = ip.replace(".", "-");
+        SettingsManager.getData().set(ip + ".millis", Integer.valueOf(0));
+        SettingsManager.getData().set(player.getUniqueId() + ".millis", Integer.valueOf(0));
+
+        if (SettingsManager.getConfig().getBoolean("mysql.enabled")) {
+            MySQLManager.updateCooldownIP(ip, 0L);
+            MySQLManager.updateCooldownUUID(player.getUniqueId(), 0L);
+        }
+    }
 }
 
