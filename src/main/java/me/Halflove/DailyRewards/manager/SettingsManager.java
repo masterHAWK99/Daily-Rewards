@@ -160,12 +160,4 @@ public class SettingsManager {
     public void reloadConfig() {
         config = YamlConfiguration.loadConfiguration(cfile);
     }
-
-    public PluginDescriptionFile getDesc() {
-        return p.getDescription();
-    }
-
-    public static boolean containsIgnoreCase(String str, String subString) {
-        return str.toLowerCase().contains(subString.toLowerCase());
-    }
 }
