@@ -34,16 +34,9 @@ public class RewardManager {
             player.playSound(player.getLocation(), Sound.valueOf(sound), volume, pitch);
         }
         for (String prize : SettingsManager.getConfig().getConfigurationSection("rewards").getKeys(false)) {
-            String ip = player.getAddress().getAddress().getHostAddress();
-            ip = ip.replace(".", "-");
             long toSet = Math.abs(System.currentTimeMillis())
                 + Math.abs(SettingsManager.getConfig().getInt("cooldown"));
-            SettingsManager.getData().set(ip + ".millis", Long.valueOf(toSet));
-            SettingsManager.getData().set(player.getUniqueId() + ".millis", Long.valueOf(toSet));
-            if (SettingsManager.getConfig().getBoolean("mysql.enabled")) {
-                MySQLManager.updateCooldownIP(ip, Long.valueOf(toSet).longValue());
-                MySQLManager.updateCooldownUUID(player.getUniqueId(), Long.valueOf(toSet).longValue());
-            }
+            CooldownManager.updateTime(player, toSet);
             SettingsManager.saveData();
             if (!SettingsManager.getConfig().getBoolean("rewards." + prize + ".permission")) {
                 String claim = SettingsManager.getConfig().getString("rewards." + prize + ".claim-message");
