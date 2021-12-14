@@ -14,7 +14,9 @@ import org.bukkit.entity.Player;
 
 public class RewardCommands implements CommandExecutor {
 
-    public static void onCommand(Player player) {
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        Player player = (Player) sender;
+
         if (player.hasPermission("dr.claim")) {
             if (SettingsManager.getConfig().getBoolean("savetoip")) {
                 if (!CooldownManager.getAllowRewardip(player)) {
@@ -41,9 +43,11 @@ public class RewardCommands implements CommandExecutor {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
             }
         }
+
+        return true;
     }
 
-    private static void noRewardsMessage(Player player, long millis) {
+    private void noRewardsMessage(Player player, long millis) {
         String norewards = SettingsManager.getMsg().getString("no-rewards");
         if (!norewards.equalsIgnoreCase("")) {
             if (Main.papi) {
@@ -68,14 +72,6 @@ public class RewardCommands implements CommandExecutor {
             }
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', cdmsg));
         }
-    }
-
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        Player player = (Player) sender;
-        if (cmd.getName().equalsIgnoreCase("reward")) {
-            onCommand(player);
-        }
-        return true;
     }
 }
 
