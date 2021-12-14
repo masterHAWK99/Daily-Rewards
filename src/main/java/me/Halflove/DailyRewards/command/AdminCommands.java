@@ -61,7 +61,7 @@ public class AdminCommands implements CommandExecutor {
                     if (sender instanceof Player) {
                         if (args.length == 1) {
                             Player player = (Player) sender;
-                            CooldownManager.updateTime(player);
+                            CooldownManager.updateTime(player, 0L);
                             sender.sendMessage(ChatColor.GREEN + "You reset your cooldown.");
                         }
                     } else {
@@ -74,7 +74,7 @@ public class AdminCommands implements CommandExecutor {
                             sender.sendMessage(ChatColor.RED + "The specified player is offline.");
                             return true;
                         }
-                        CooldownManager.updateTime(target);
+                        CooldownManager.updateTime(target, 0L);
                         sender.sendMessage(ChatColor.GREEN + "You reset " + target.getName() + "'s cooldown.");
                     }
                 }

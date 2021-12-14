@@ -59,15 +59,15 @@ public class CooldownManager {
         return SettingsManager.getData().getLong(ip + ".reset");
     }
 
-    public static void updateTime(Player player) {
+    public static void updateTime(Player player, long millis) {
         String ip = player.getAddress().getAddress().getHostAddress();
         ip = ip.replace(".", "-");
-        SettingsManager.getData().set(ip + ".millis", Integer.valueOf(0));
-        SettingsManager.getData().set(player.getUniqueId() + ".millis", Integer.valueOf(0));
+        SettingsManager.getData().set(ip + ".millis", millis);
+        SettingsManager.getData().set(player.getUniqueId() + ".millis", millis);
 
         if (SettingsManager.getConfig().getBoolean("mysql.enabled")) {
-            MySQLManager.updateCooldownIP(ip, 0L);
-            MySQLManager.updateCooldownUUID(player.getUniqueId(), 0L);
+            MySQLManager.updateCooldownIP(ip, millis);
+            MySQLManager.updateCooldownUUID(player.getUniqueId(), millis);
         }
     }
 }
