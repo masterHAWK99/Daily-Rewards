@@ -36,12 +36,9 @@ public class AdminCommands implements CommandExecutor {
                 if (args[0].equalsIgnoreCase("reload")) {
                     final boolean startmysql;
                     startmysql = !SettingsManager.getConfig().getBoolean("mysql.enabled");
-                    this.plugin.settings.reloadData();
-                    this.plugin.settings.reloadConfig();
-                    this.plugin.settings.reloadMsg();
-                    SettingsManager.saveData();
-                    this.plugin.settings.saveConfig();
-                    this.plugin.settings.saveMsg();
+                    SettingsManager.getData().reload();
+                    SettingsManager.getConfig().reload();
+                    SettingsManager.getMsg().reload();
                     sender.sendMessage(ChatColor.YELLOW + "DailyRewards is reloading...");
                     (new BukkitRunnable() {
                         public void run() {

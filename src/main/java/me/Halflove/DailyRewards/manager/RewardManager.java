@@ -42,7 +42,7 @@ public class RewardManager {
             long toSet = Math.abs(System.currentTimeMillis())
                 + Math.abs(SettingsManager.getConfig().getInt("cooldown"));
             CooldownManager.updateTime(player, toSet);
-            SettingsManager.saveData();
+            SettingsManager.getData().save();
 
             String claim = SettingsManager.getConfig().getString("rewards." + prize + ".claim-message");
             if (!claim.equalsIgnoreCase("")) {
