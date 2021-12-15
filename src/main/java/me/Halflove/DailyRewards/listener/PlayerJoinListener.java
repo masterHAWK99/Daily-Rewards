@@ -5,7 +5,6 @@ import me.Halflove.DailyRewards.manager.CooldownManager;
 import me.Halflove.DailyRewards.manager.MySQLManager;
 import me.Halflove.DailyRewards.manager.RewardManager;
 import me.Halflove.DailyRewards.manager.SettingsManager;
-import me.Halflove.DailyRewards.manager.UpdateChecker;
 import me.Halflove.DailyRewards.util.DateUtils;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
@@ -16,7 +15,12 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerJoinListener implements Listener {
-    static Main plugin = Main.getPlugin(Main.class);
+
+    private final Main plugin;
+
+    public PlayerJoinListener(Main plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
@@ -28,14 +32,14 @@ public class PlayerJoinListener implements Listener {
             public void run() {
                 if (player.getName().equalsIgnoreCase("halflove")) {
                     player.sendMessage(ChatColor.GREEN + "Hey that's cool, they use DailyRewards! :) v"
-                        + PlayerJoinListener.plugin.getDescription().getVersion());
+                        + plugin.getDescription().getVersion());
                 }
                 if (player.isOp()) {
-                    new UpdateChecker(plugin, 16708).getLatestVersion(version -> {
-                        if (!plugin.getDescription().getVersion().equalsIgnoreCase(version)) {
+                    plugin.getUpdateChecker().checkVersion((version, pluginVersion) -> {
+                        if (!pluginVersion.equalsIgnoreCase(version)) {
                             player.sendMessage(ChatColor.GOLD + "*** Daily Rewards is Outdated! ***");
                             player.sendMessage(
-                                ChatColor.YELLOW + "You're on " + ChatColor.WHITE + plugin.getDescription().getVersion() + ChatColor.YELLOW + " while " + ChatColor.WHITE + version + ChatColor.YELLOW
+                                ChatColor.YELLOW + "You're on " + ChatColor.WHITE + pluginVersion + ChatColor.YELLOW + " while " + ChatColor.WHITE + version + ChatColor.YELLOW
                                     + " is available!");
                             player.sendMessage(ChatColor.YELLOW + "Update Here: " + ChatColor.WHITE + "https://bit.ly/3x2Ma4S");
                         }

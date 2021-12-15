@@ -18,6 +18,8 @@ public class Main extends JavaPlugin implements Listener {
 
     public SettingsManager settings = SettingsManager.getInstance();
 
+    private UpdateChecker updateChecker;
+
     public void onEnable() {
         getCommand("dailyrewards").setExecutor(new AdminCommands(this));
         getCommand("reward").setExecutor(new RewardCommands());
@@ -37,20 +39,24 @@ public class Main extends JavaPlugin implements Listener {
             papi = false;
         }
 
-        new UpdateChecker(this, 16708).getLatestVersion(version -> {
-            if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
+        updateChecker = new UpdateChecker(this, 16708);
+        updateChecker.checkVersion((version, pluginVersion) -> {
+            if (pluginVersion.equalsIgnoreCase(version)) {
                 getLogger().info("Plugin is up to date.");
             } else {
                 getLogger().severe("*** Daily Rewards is Outdated! ***");
-                getLogger().severe("*** You're on " + this.getDescription().getVersion() + " while " + version + " is available! ***");
+                getLogger().severe("*** You're on " + pluginVersion + " while " + version + " is available! ***");
                 getLogger().severe("*** Update Here: https://www.spigotmc.org/resources/daily-rewards.16708/ ***");
             }
         });
+    }
 
+    public UpdateChecker getUpdateChecker() {
+        return updateChecker;
     }
 
     private void registerEvents() {
-        Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(this), this);
         Bukkit.getPluginManager().registerEvents(this, this);
     }
 }
