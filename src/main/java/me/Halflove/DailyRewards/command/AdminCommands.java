@@ -4,6 +4,7 @@ import me.Halflove.DailyRewards.Main;
 import me.Halflove.DailyRewards.manager.CooldownManager;
 import me.Halflove.DailyRewards.manager.MySQLManager;
 import me.Halflove.DailyRewards.manager.SettingsManager;
+import me.Halflove.DailyRewards.util.MessageUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -79,7 +80,7 @@ public class AdminCommands implements CommandExecutor {
             }
             String msg = SettingsManager.getMsg().getString("no-permission");
             msg = msg.replace("%player", sender.getName());
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+            MessageUtils.sendMessage(sender, msg);
         }
         return true;
     }

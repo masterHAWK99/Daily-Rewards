@@ -5,8 +5,8 @@ import me.Halflove.DailyRewards.manager.CooldownManager;
 import me.Halflove.DailyRewards.manager.RewardManager;
 import me.Halflove.DailyRewards.manager.SettingsManager;
 import me.Halflove.DailyRewards.util.DateUtils;
+import me.Halflove.DailyRewards.util.MessageUtils;
 import me.clip.placeholderapi.PlaceholderAPI;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -40,7 +40,7 @@ public class RewardCommands implements CommandExecutor {
                     msg = PlaceholderAPI.setPlaceholders(player, msg);
                 }
                 msg = msg.replace("%player", player.getName());
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+                MessageUtils.sendMessage(player, msg);
             }
         }
 
@@ -53,7 +53,7 @@ public class RewardCommands implements CommandExecutor {
             if (Main.papi) {
                 norewards = PlaceholderAPI.setPlaceholders(player, norewards);
             }
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', norewards));
+            MessageUtils.sendMessage(player, norewards);
         }
 
         String cdmsg = SettingsManager.getMsg().getString("cooldown-msg");
@@ -70,7 +70,7 @@ public class RewardCommands implements CommandExecutor {
             if (Main.papi) {
                 cdmsg = PlaceholderAPI.setPlaceholders(player, cdmsg);
             }
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', cdmsg));
+            MessageUtils.sendMessage(player, cdmsg);
         }
     }
 }

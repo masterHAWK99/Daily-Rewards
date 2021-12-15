@@ -6,6 +6,7 @@ import me.Halflove.DailyRewards.manager.MySQLManager;
 import me.Halflove.DailyRewards.manager.RewardManager;
 import me.Halflove.DailyRewards.manager.SettingsManager;
 import me.Halflove.DailyRewards.util.DateUtils;
+import me.Halflove.DailyRewards.util.MessageUtils;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -127,7 +128,7 @@ public class PlayerJoinListener implements Listener {
                     } else {
                         String msg = SettingsManager.getMsg().getString("no-permission");
                         msg = msg.replace("%player", player.getName());
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+                        MessageUtils.sendMessage(player, msg);
                     }
                 }
             }).runTaskLater(plugin, SettingsManager.getConfig().getInt("loginclaim.delay"));
@@ -140,7 +141,7 @@ public class PlayerJoinListener implements Listener {
                         if (Main.papi) {
                             available = PlaceholderAPI.setPlaceholders(player, available);
                         }
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', available));
+                        MessageUtils.sendMessage(player, available);
                     }
                 }
             }).runTaskLater(plugin, 50L);

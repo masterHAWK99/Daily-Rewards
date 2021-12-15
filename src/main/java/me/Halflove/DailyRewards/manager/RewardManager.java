@@ -5,9 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import me.Halflove.DailyRewards.Main;
+import me.Halflove.DailyRewards.util.MessageUtils;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -49,12 +49,12 @@ public class RewardManager {
                 if (Main.papi) {
                     claim = PlaceholderAPI.setPlaceholders(player, claim);
                 }
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', claim));
+                MessageUtils.sendMessage(player, claim);
             }
             if (!SettingsManager.getConfig().getString("rewards." + prize + ".broadcast").equalsIgnoreCase("")) {
                 String msg = SettingsManager.getConfig().getString("rewards." + prize + ".broadcast");
                 msg = msg.replace("%player", player.getName());
-                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', msg));
+                MessageUtils.sendBroadcastMessage(msg);
             }
             new BukkitRunnable() {
                 public void run() {

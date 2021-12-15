@@ -1,7 +1,7 @@
 name: DailyRewards
 author: Halflove
 main: me.Halflove.DailyRewards.Main
-version: 1.3.8
+version: 1.3.9
 softdepend: [PlaceholderAPI]
 api-version: 1.16
 
