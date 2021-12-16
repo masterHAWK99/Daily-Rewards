@@ -16,7 +16,7 @@ public class Main extends JavaPlugin implements Listener {
 
     public static boolean papi;
 
-    public SettingsManager settings;
+    private SettingsManager settings;
 
     private UpdateChecker updateChecker;
 
