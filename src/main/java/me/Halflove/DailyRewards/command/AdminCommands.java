@@ -39,7 +39,7 @@ public class AdminCommands implements CommandExecutor {
                     startmysql = !SettingsManager.getConfig().getBoolean("mysql.enabled");
                     SettingsManager.getData().reload();
                     SettingsManager.getConfig().reload();
-                    SettingsManager.getMsg().reload();
+                    plugin.getSettings().loadConfigs();
                     sender.sendMessage(ChatColor.YELLOW + "DailyRewards is reloading...");
                     (new BukkitRunnable() {
                         public void run() {
@@ -78,7 +78,7 @@ public class AdminCommands implements CommandExecutor {
                 }
                 return true;
             }
-            String msg = SettingsManager.getMsg().getString("no-permission");
+            String msg = plugin.getSettings().getMessagesConfig().noPermission;
             msg = msg.replace("%player", sender.getName());
             MessageUtils.sendMessage(sender, msg);
         }

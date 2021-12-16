@@ -126,7 +126,7 @@ public class PlayerJoinListener implements Listener {
                             RewardManager.setReward(player);
                         }
                     } else {
-                        String msg = SettingsManager.getMsg().getString("no-permission");
+                        String msg = plugin.getSettings().getMessagesConfig().noPermission;
                         msg = msg.replace("%player", player.getName());
                         MessageUtils.sendMessage(player, msg);
                     }
@@ -136,13 +136,11 @@ public class PlayerJoinListener implements Listener {
             && (CooldownManager.getAllowRewardip(player) || CooldownManager.getAllowRewardUUID(player))) {
             (new BukkitRunnable() {
                 public void run() {
-                    String available = SettingsManager.getMsg().getString("reward-available");
-                    if (!available.equals("")) {
-                        if (Main.papi) {
-                            available = PlaceholderAPI.setPlaceholders(player, available);
-                        }
-                        MessageUtils.sendMessage(player, available);
+                    String available = plugin.getSettings().getMessagesConfig().rewardAvailable;
+                    if (Main.papi) {
+                        available = PlaceholderAPI.setPlaceholders(player, available);
                     }
+                    MessageUtils.sendMessage(player, available);
                 }
             }).runTaskLater(plugin, 50L);
         }

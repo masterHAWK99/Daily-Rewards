@@ -9,19 +9,20 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import me.Halflove.DailyRewards.Main;
+import me.Halflove.DailyRewards.config.MessagesConfig;
 import org.bukkit.plugin.Plugin;
 
 public class SettingsManager {
 
     private final ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory()).configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
 
-    private static Plugin plugin;
+    private Plugin plugin;
 
     private static Config config;
 
     private static Config data;
 
-    private static Config msg;
+    private MessagesConfig messagesConfig;
 
     public SettingsManager(Main plugin) {
         this.plugin = plugin;
@@ -29,8 +30,8 @@ public class SettingsManager {
         setup();
     }
 
-    public static Config getMsg() {
-        return msg;
+    public MessagesConfig getMessagesConfig() {
+        return messagesConfig;
     }
 
     public static Config getData() {
@@ -74,10 +75,21 @@ public class SettingsManager {
         }
     }
 
+    public void loadConfigs() {
+        messagesConfig = loadConfig(new File(plugin.getDataFolder(), "messages.yml"), MessagesConfig.class);
+    }
+
+    public void saveConfigs() {
+        saveConfig(new File(plugin.getDataFolder(), "messages.yml"), messagesConfig);
+    }
+
     public void setup() {
         if (!plugin.getDataFolder().exists()) {
             plugin.getDataFolder().mkdir();
         }
+
+        loadConfigs();
+        saveConfigs();
 
         config = new Config(plugin.getDataFolder(), "config.yml");
         config.options().copyDefaults(true);
@@ -129,15 +141,5 @@ public class SettingsManager {
         config.save();
 
         data = new Config(plugin.getDataFolder(), "data.yml");
-
-        msg = new Config(plugin.getDataFolder(), "messages.yml");
-        msg.options().copyDefaults(true);
-        msg.addDefault("no-rewards", "&aRewards&f: &fYou do not have any available rewards at the moment.");
-        msg.addDefault("cooldown-msg", "&aRewards&f: &fTime until next reward: %time%");
-        msg.addDefault("no-permission", "&aRewards&f: &fYou do not have permission to do ");
-        msg.addDefault("reward-available", "&aRewards&f: &fYou have unclaimed daily rewards, do &e/reward &fto claim!");
-        msg.addDefault("PlaceholderAPI.reward-available", "Unclaimed Rewards Available!");
-        msg.addDefault("PlaceholderAPI.no-rewards", "No Rewards Available");
-        msg.save();
     }
 }

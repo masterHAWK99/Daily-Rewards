@@ -65,15 +65,15 @@ public class PAPIExtensions extends PlaceholderExpansion {
                 output = CooldownManager.getAllowRewardUUID(player);
             }
             if (output) {
-                return SettingsManager.getMsg().getString("PlaceholderAPI.reward_available");
+                return plugin.getSettings().getMessagesConfig().papiPlaceholders.rewardAvailable;
             }
-            return SettingsManager.getMsg().getString("PlaceholderAPI.no_rewards");
+            return plugin.getSettings().getMessagesConfig().papiPlaceholders.noRewards;
         }
         if (identifier.equals("player_reward_available")) {
-            return SettingsManager.getMsg().getString("PlaceholderAPI.reward_available");
+            return plugin.getSettings().getMessagesConfig().papiPlaceholders.rewardAvailable;
         }
         if (identifier.equals("player_no_rewards")) {
-            return SettingsManager.getMsg().getString("PlaceholderAPI.no_rewards");
+            return plugin.getSettings().getMessagesConfig().papiPlaceholders.noRewards;
         }
         return null;
     }

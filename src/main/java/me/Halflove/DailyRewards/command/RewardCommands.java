@@ -14,6 +14,12 @@ import org.bukkit.entity.Player;
 
 public class RewardCommands implements CommandExecutor {
 
+    private final Main plugin;
+
+    public RewardCommands(Main plugin) {
+        this.plugin = plugin;
+    }
+
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Player player = (Player) sender;
 
@@ -34,29 +40,25 @@ public class RewardCommands implements CommandExecutor {
                 RewardManager.setReward(player);
             }
         } else {
-            String msg = SettingsManager.getMsg().getString("no-permission");
-            if (!msg.equalsIgnoreCase("")) {
-                if (Main.papi) {
-                    msg = PlaceholderAPI.setPlaceholders(player, msg);
-                }
-                msg = msg.replace("%player", player.getName());
-                MessageUtils.sendMessage(player, msg);
+            String msg = plugin.getSettings().getMessagesConfig().noPermission;
+            if (Main.papi) {
+                msg = PlaceholderAPI.setPlaceholders(player, msg);
             }
+            msg = msg.replace("%player", player.getName());
+            MessageUtils.sendMessage(player, msg);
         }
 
         return true;
     }
 
     private void noRewardsMessage(Player player, long millis) {
-        String norewards = SettingsManager.getMsg().getString("no-rewards");
-        if (!norewards.equalsIgnoreCase("")) {
-            if (Main.papi) {
-                norewards = PlaceholderAPI.setPlaceholders(player, norewards);
-            }
-            MessageUtils.sendMessage(player, norewards);
+        String norewards = plugin.getSettings().getMessagesConfig().noRewards;
+        if (Main.papi) {
+            norewards = PlaceholderAPI.setPlaceholders(player, norewards);
         }
+        MessageUtils.sendMessage(player, norewards);
 
-        String cdmsg = SettingsManager.getMsg().getString("cooldown-msg");
+        String cdmsg = plugin.getSettings().getMessagesConfig().cooldown;
         cdmsg = cdmsg.replace("%time%", DateUtils.getRemainingTime(millis));
         cdmsg = cdmsg.replace("%s%", DateUtils.getRemainingSec(millis));
         cdmsg = cdmsg.replace("%m%", DateUtils.getRemainingMin(millis));
@@ -66,12 +68,10 @@ public class RewardCommands implements CommandExecutor {
         cdmsg = cdmsg.replace("%m", DateUtils.getRemainingMin(millis));
         cdmsg = cdmsg.replace("%h", DateUtils.getRemainingHour(millis));
 
-        if (!cdmsg.equalsIgnoreCase("")) {
-            if (Main.papi) {
-                cdmsg = PlaceholderAPI.setPlaceholders(player, cdmsg);
-            }
-            MessageUtils.sendMessage(player, cdmsg);
+        if (Main.papi) {
+            cdmsg = PlaceholderAPI.setPlaceholders(player, cdmsg);
         }
+        MessageUtils.sendMessage(player, cdmsg);
     }
 }
 
