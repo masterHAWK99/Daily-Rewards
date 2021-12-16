@@ -57,13 +57,11 @@ public class PlayerJoinListener implements Listener {
                         if (SettingsManager.getConfig().getBoolean("savetoip")) {
                             if (!CooldownManager.getAllowRewardip(player)) {
                                 long releaseip;
-                                String noreward = SettingsManager.getMsg().getString("no-rewards");
-                                if (!noreward.equalsIgnoreCase("")) {
-                                    if (Main.papi) {
-                                        noreward = PlaceholderAPI.setPlaceholders(player, noreward);
-                                    }
-                                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', noreward));
+                                String noreward = plugin.getSettings().getMessagesConfig().noRewards;
+                                if (Main.papi) {
+                                    noreward = PlaceholderAPI.setPlaceholders(player, noreward);
                                 }
+                                player.sendMessage(ChatColor.translateAlternateColorCodes('&', noreward));
                                 long current = System.currentTimeMillis();
                                 if (SettingsManager.getConfig().getBoolean("mysql.enabled")) {
                                     releaseip = MySQLManager.getCooldownIP(ip);
@@ -71,7 +69,7 @@ public class PlayerJoinListener implements Listener {
                                     releaseip = SettingsManager.getData().getLong(ip + ".millis");
                                 }
                                 long millis = releaseip - current;
-                                String cdmsg = SettingsManager.getMsg().getString("cooldown-msg");
+                                String cdmsg = plugin.getSettings().getMessagesConfig().cooldown;
                                 cdmsg = cdmsg.replace("%time%", DateUtils.getRemainingTime(millis));
                                 cdmsg = cdmsg.replace("%s%", DateUtils.getRemainingSec(millis));
                                 cdmsg = cdmsg.replace("%m%", DateUtils.getRemainingMin(millis));
@@ -92,13 +90,11 @@ public class PlayerJoinListener implements Listener {
                             }
                         } else if (!CooldownManager.getAllowRewardUUID(player)) {
                             long releaseip;
-                            String noreward = SettingsManager.getMsg().getString("no-rewards");
-                            if (!noreward.equalsIgnoreCase("")) {
-                                if (Main.papi) {
-                                    noreward = PlaceholderAPI.setPlaceholders(player, noreward);
-                                }
-                                player.sendMessage(ChatColor.translateAlternateColorCodes('&', noreward));
+                            String noreward = plugin.getSettings().getMessagesConfig().noRewards;
+                            if (Main.papi) {
+                                noreward = PlaceholderAPI.setPlaceholders(player, noreward);
                             }
+                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', noreward));
                             long current = System.currentTimeMillis();
                             if (SettingsManager.getConfig().getBoolean("mysql.enabled")) {
                                 releaseip = MySQLManager.getCooldownUUID(player.getUniqueId());
@@ -106,7 +102,7 @@ public class PlayerJoinListener implements Listener {
                                 releaseip = SettingsManager.getData().getLong(player.getUniqueId() + ".millis");
                             }
                             long millis = releaseip - current;
-                            String cdmsg = SettingsManager.getMsg().getString("cooldown-msg");
+                            String cdmsg = plugin.getSettings().getMessagesConfig().cooldown;
                             cdmsg = cdmsg.replace("%time%", DateUtils.getRemainingTime(millis));
                             cdmsg = cdmsg.replace("%s%", DateUtils.getRemainingSec(millis));
                             cdmsg = cdmsg.replace("%m%", DateUtils.getRemainingMin(millis));
@@ -115,12 +111,10 @@ public class PlayerJoinListener implements Listener {
                             cdmsg = cdmsg.replace("%s", DateUtils.getRemainingSec(millis));
                             cdmsg = cdmsg.replace("%m", DateUtils.getRemainingMin(millis));
                             cdmsg = cdmsg.replace("%h", DateUtils.getRemainingHour(millis));
-                            if (!cdmsg.equalsIgnoreCase("")) {
-                                if (Main.papi) {
-                                    cdmsg = PlaceholderAPI.setPlaceholders(player, cdmsg);
-                                }
-                                player.sendMessage(ChatColor.translateAlternateColorCodes('&', cdmsg));
+                            if (Main.papi) {
+                                cdmsg = PlaceholderAPI.setPlaceholders(player, cdmsg);
                             }
+                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', cdmsg));
                             RewardManager.noReward(player);
                         } else {
                             RewardManager.setReward(player);
