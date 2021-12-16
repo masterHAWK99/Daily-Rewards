@@ -16,14 +16,16 @@ public class Main extends JavaPlugin implements Listener {
 
     public static boolean papi;
 
-    public SettingsManager settings = SettingsManager.getInstance();
+    public SettingsManager settings;
 
     private UpdateChecker updateChecker;
 
     public void onEnable() {
         getCommand("dailyrewards").setExecutor(new AdminCommands(this));
-        getCommand("reward").setExecutor(new RewardCommands());
-        this.settings.setup(this);
+        getCommand("reward").setExecutor(new RewardCommands(this));
+
+        settings = new SettingsManager(this);
+
         registerEvents();
         if (SettingsManager.getConfig().getBoolean("mysql.enabled")) {
             MySQLManager.mysqlSetup();
@@ -49,6 +51,10 @@ public class Main extends JavaPlugin implements Listener {
                 getLogger().severe("*** Update Here: https://www.spigotmc.org/resources/daily-rewards.16708/ ***");
             }
         });
+    }
+
+    public SettingsManager getSettings() {
+        return settings;
     }
 
     public UpdateChecker getUpdateChecker() {

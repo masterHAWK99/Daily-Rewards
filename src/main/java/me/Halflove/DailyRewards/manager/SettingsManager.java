@@ -2,13 +2,12 @@ package me.Halflove.DailyRewards.manager;
 
 import java.util.ArrayList;
 import java.util.List;
+import me.Halflove.DailyRewards.Main;
 import org.bukkit.plugin.Plugin;
 
 public class SettingsManager {
 
-    private static SettingsManager instance = new SettingsManager();
-
-    private static Plugin p;
+    private static Plugin plugin;
 
     private static Config config;
 
@@ -16,8 +15,10 @@ public class SettingsManager {
 
     private static Config msg;
 
-    public static SettingsManager getInstance() {
-        return instance;
+    public SettingsManager(Main plugin) {
+        this.plugin = plugin;
+
+        setup();
     }
 
     public static Config getMsg() {
@@ -32,12 +33,12 @@ public class SettingsManager {
         return config;
     }
 
-    public void setup(Plugin p) {
-        if (!p.getDataFolder().exists()) {
-            p.getDataFolder().mkdir();
+    public void setup() {
+        if (!plugin.getDataFolder().exists()) {
+            plugin.getDataFolder().mkdir();
         }
 
-        config = new Config(p.getDataFolder(), "config.yml");
+        config = new Config(plugin.getDataFolder(), "config.yml");
         config.options().copyDefaults(true);
         config.addDefault("cooldown", 86400000);
         config.addDefault("savetoip", Boolean.FALSE);
@@ -86,9 +87,9 @@ public class SettingsManager {
         config.addDefault("rewards.advanced.commands", command2);
         config.save();
 
-        data = new Config(p.getDataFolder(), "data.yml");
+        data = new Config(plugin.getDataFolder(), "data.yml");
 
-        msg = new Config(p.getDataFolder(), "messages.yml");
+        msg = new Config(plugin.getDataFolder(), "messages.yml");
         msg.options().copyDefaults(true);
         msg.addDefault("no-rewards", "&aRewards&f: &fYou do not have any available rewards at the moment.");
         msg.addDefault("cooldown-msg", "&aRewards&f: &fTime until next reward: %time%");
