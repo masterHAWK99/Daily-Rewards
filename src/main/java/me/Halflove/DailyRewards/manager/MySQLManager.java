@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
+import me.Halflove.DailyRewards.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -14,12 +15,15 @@ public class MySQLManager {
 
     private static Connection connection;
 
+    // TODO: Temporary solution
+    private static final Main plugin = Main.getPlugin(Main.class);
+
     public static void mysqlSetup() {
-        String host = SettingsManager.getConfig().getString("mysql.host-name");
-        int port = SettingsManager.getConfig().getInt("mysql.port");
-        String database = SettingsManager.getConfig().getString("mysql.database");
-        String username = SettingsManager.getConfig().getString("mysql.username");
-        String password = SettingsManager.getConfig().getString("mysql.password");
+        String host = plugin.getSettings().getConfiguration().mysql.host;
+        int port = plugin.getSettings().getConfiguration().mysql.port;
+        String database = plugin.getSettings().getConfiguration().mysql.database;
+        String user = plugin.getSettings().getConfiguration().mysql.user;
+        String password = plugin.getSettings().getConfiguration().mysql.password;
 
         try {
             if (connection != null && !connection.isClosed()) {
@@ -27,7 +31,7 @@ public class MySQLManager {
             }
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database,
-                username, password);
+                user, password);
             Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Daily Rewards MySQL: Successfully Connected");
         } catch (SQLException e) {
             e.printStackTrace();

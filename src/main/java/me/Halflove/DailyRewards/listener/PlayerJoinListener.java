@@ -26,7 +26,7 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         final Player player = e.getPlayer();
-        if (SettingsManager.getConfig().getBoolean("mysql.enabled")) {
+        if (plugin.getSettings().getConfiguration().mysql.enabled) {
             MySQLManager.createPlayer(player);
         }
         (new BukkitRunnable() {
@@ -48,13 +48,13 @@ public class PlayerJoinListener implements Listener {
                 }
             }
         }).runTaskLater(plugin, 50L);
-        if (SettingsManager.getConfig().getBoolean("loginclaim.enabled") && player.hasPermission("dr.claim")) {
+        if (plugin.getSettings().getConfiguration().claimOnLogin.enabled && player.hasPermission("dr.claim")) {
             (new BukkitRunnable() {
                 public void run() {
                     if (player.hasPermission("dr.claim")) {
                         String ip = player.getAddress().getAddress().getHostAddress();
                         ip = ip.replace(".", "-");
-                        if (SettingsManager.getConfig().getBoolean("savetoip")) {
+                        if (plugin.getSettings().getConfiguration().saveToIp) {
                             if (!CooldownManager.getAllowRewardip(player)) {
                                 long releaseip;
                                 String noreward = plugin.getSettings().getMessagesConfig().noRewards;
@@ -63,7 +63,7 @@ public class PlayerJoinListener implements Listener {
                                 }
                                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', noreward));
                                 long current = System.currentTimeMillis();
-                                if (SettingsManager.getConfig().getBoolean("mysql.enabled")) {
+                                if (plugin.getSettings().getConfiguration().mysql.enabled) {
                                     releaseip = MySQLManager.getCooldownIP(ip);
                                 } else {
                                     releaseip = SettingsManager.getData().getLong(ip + ".millis");
@@ -96,7 +96,7 @@ public class PlayerJoinListener implements Listener {
                             }
                             player.sendMessage(ChatColor.translateAlternateColorCodes('&', noreward));
                             long current = System.currentTimeMillis();
-                            if (SettingsManager.getConfig().getBoolean("mysql.enabled")) {
+                            if (plugin.getSettings().getConfiguration().mysql.enabled) {
                                 releaseip = MySQLManager.getCooldownUUID(player.getUniqueId());
                             } else {
                                 releaseip = SettingsManager.getData().getLong(player.getUniqueId() + ".millis");
@@ -125,7 +125,7 @@ public class PlayerJoinListener implements Listener {
                         MessageUtils.sendMessage(player, msg);
                     }
                 }
-            }).runTaskLater(plugin, SettingsManager.getConfig().getInt("loginclaim.delay"));
+            }).runTaskLater(plugin, plugin.getSettings().getConfiguration().claimOnLogin.delay);
         } else if (player.hasPermission("dr.claim")
             && (CooldownManager.getAllowRewardip(player) || CooldownManager.getAllowRewardUUID(player))) {
             (new BukkitRunnable() {

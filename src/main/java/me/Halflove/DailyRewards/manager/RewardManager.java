@@ -1,10 +1,10 @@
 package me.Halflove.DailyRewards.manager;
 
 import com.google.common.base.Splitter;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import me.Halflove.DailyRewards.Main;
+import me.Halflove.DailyRewards.config.DefaultConfig;
 import me.Halflove.DailyRewards.util.MessageUtils;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
@@ -18,49 +18,46 @@ public class RewardManager {
     static Main plugin = Main.getPlugin(Main.class);
 
     public static void noReward(Player player) {
-        String sound = SettingsManager.getConfig().getString("noreward.sound.type");
-        int volume = SettingsManager.getConfig().getInt("noreward.sound.volume");
-        int pitch = SettingsManager.getConfig().getInt("noreward.sound.pitch");
-        if (SettingsManager.getConfig().getBoolean("noreward.sound.enabled")) {
+        String sound = plugin.getSettings().getConfiguration().noRewardSound.type;
+        float volume = plugin.getSettings().getConfiguration().noRewardSound.volume;
+        float pitch = plugin.getSettings().getConfiguration().noRewardSound.pitch;
+        if (plugin.getSettings().getConfiguration().noRewardSound.enabled) {
             player.playSound(player.getLocation(), Sound.valueOf(sound), volume, pitch);
         }
     }
 
     public static void setReward(final Player player) {
-        String sound = SettingsManager.getConfig().getString("claim.sound.type");
-        int volume = SettingsManager.getConfig().getInt("claim.sound.volume");
-        int pitch = SettingsManager.getConfig().getInt("claim.sound.pitch");
-        if (SettingsManager.getConfig().getBoolean("claim.sound.enabled")) {
+        String sound = plugin.getSettings().getConfiguration().claimSound.type;
+        float volume = plugin.getSettings().getConfiguration().claimSound.volume;
+        float pitch = plugin.getSettings().getConfiguration().claimSound.pitch;
+        if (plugin.getSettings().getConfiguration().claimSound.enabled) {
             player.playSound(player.getLocation(), Sound.valueOf(sound), volume, pitch);
         }
-        for (String prize : SettingsManager.getConfig().getConfigurationSection("rewards").getKeys(false)) {
-            if (SettingsManager.getConfig().getBoolean("rewards." + prize + ".permission")
-                && !player.hasPermission("dr." + SettingsManager.getConfig().getString("rewards." + prize + ".name"))) {
+        for (DefaultConfig.Reward reward : plugin.getSettings().getConfiguration().rewards) {
+            if (reward.permission && !player.hasPermission("dr." + reward.name)) {
                 continue;
             }
 
             long toSet = Math.abs(System.currentTimeMillis())
-                + Math.abs(SettingsManager.getConfig().getInt("cooldown"));
+                + Math.abs(plugin.getSettings().getConfiguration().cooldown);
             CooldownManager.updateTime(player, toSet);
             SettingsManager.getData().save();
 
-            String claim = SettingsManager.getConfig().getString("rewards." + prize + ".claim-message");
-            if (!claim.equalsIgnoreCase("")) {
-                if (Main.papi) {
-                    claim = PlaceholderAPI.setPlaceholders(player, claim);
-                }
-                MessageUtils.sendMessage(player, claim);
+            String claim = reward.message;
+            claim = claim.replace("%name%", reward.name);
+            if (Main.papi) {
+                claim = PlaceholderAPI.setPlaceholders(player, claim);
             }
-            if (!SettingsManager.getConfig().getString("rewards." + prize + ".broadcast").equalsIgnoreCase("")) {
-                String msg = SettingsManager.getConfig().getString("rewards." + prize + ".broadcast");
+            MessageUtils.sendMessage(player, claim);
+            if (!reward.broadcastMessage.equalsIgnoreCase("")) {
+                String msg = reward.broadcastMessage;
                 msg = msg.replace("%player", player.getName());
                 MessageUtils.sendBroadcastMessage(msg);
             }
             new BukkitRunnable() {
                 public void run() {
-                    if (SettingsManager.getConfig().getBoolean("rewards." + prize + ".random")) {
-                        List<String> commandList = SettingsManager.getConfig()
-                            .getStringList("rewards." + prize + ".commands");
+                    if (reward.random) {
+                        List<String> commandList = reward.commands;
                         int index = RewardManager.r.nextInt(commandList.size());
                         String selectedCommand = commandList.get(index);
                         selectedCommand = selectedCommand.replace("%player", player.getName());
@@ -76,10 +73,7 @@ public class RewardManager {
                             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), selectedCommand);
                         }
                     } else {
-                        Iterator<String> iterator = SettingsManager.getConfig()
-                            .getStringList("rewards." + prize + ".commands").iterator();
-                        while (iterator.hasNext()) {
-                            String selectedCommand = iterator.next();
+                        for (String selectedCommand : reward.commands) {
                             selectedCommand = selectedCommand.replace("%player", player.getName());
                             if (Main.papi) {
                                 selectedCommand = PlaceholderAPI.setPlaceholders(player, selectedCommand);

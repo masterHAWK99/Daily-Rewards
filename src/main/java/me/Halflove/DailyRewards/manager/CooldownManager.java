@@ -1,15 +1,19 @@
 package me.Halflove.DailyRewards.manager;
 
+import me.Halflove.DailyRewards.Main;
 import org.bukkit.entity.Player;
 
 public class CooldownManager {
+
+    // TODO: Temporary solution
+    private static final Main plugin = Main.getPlugin(Main.class);
 
     public static long getTimeIp(Player player) {
         String ip = player.getAddress().getAddress().getHostAddress();
         ip = ip.replace(".", "-");
 
         long releaseip;
-        if (SettingsManager.getConfig().getBoolean("mysql.enabled")) {
+        if (plugin.getSettings().getConfiguration().mysql.enabled) {
             releaseip = MySQLManager.getCooldownIP(ip);
         } else {
             releaseip = SettingsManager.getData().getLong(ip + ".millis");
@@ -20,7 +24,7 @@ public class CooldownManager {
 
     public static long getTimeUuid(Player player) {
         long releaseip;
-        if (SettingsManager.getConfig().getBoolean("mysql.enabled")) {
+        if (plugin.getSettings().getConfiguration().mysql.enabled) {
             releaseip = MySQLManager.getCooldownUUID(player.getUniqueId());
         } else {
             releaseip = SettingsManager.getData().getLong(player.getUniqueId() + ".millis");
@@ -65,7 +69,7 @@ public class CooldownManager {
         SettingsManager.getData().set(ip + ".millis", millis);
         SettingsManager.getData().set(player.getUniqueId() + ".millis", millis);
 
-        if (SettingsManager.getConfig().getBoolean("mysql.enabled")) {
+        if (plugin.getSettings().getConfiguration().mysql.enabled) {
             MySQLManager.updateCooldownIP(ip, millis);
             MySQLManager.updateCooldownUUID(player.getUniqueId(), millis);
         }

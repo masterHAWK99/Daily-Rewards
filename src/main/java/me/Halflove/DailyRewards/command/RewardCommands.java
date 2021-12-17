@@ -24,7 +24,7 @@ public class RewardCommands implements CommandExecutor {
         Player player = (Player) sender;
 
         if (player.hasPermission("dr.claim")) {
-            if (SettingsManager.getConfig().getBoolean("savetoip")) {
+            if (plugin.getSettings().getConfiguration().saveToIp) {
                 if (!CooldownManager.getAllowRewardip(player)) {
                     long millis = CooldownManager.getTimeIp(player) - System.currentTimeMillis();
                     noRewardsMessage(player, millis);

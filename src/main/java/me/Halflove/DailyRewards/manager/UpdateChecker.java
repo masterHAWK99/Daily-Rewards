@@ -19,6 +19,10 @@ public class UpdateChecker {
     }
 
     public void checkVersion(BiConsumer<String, String> consumer) {
+        if (!plugin.getSettings().getConfiguration().updateCheck) {
+            return;
+        }
+
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
             try (InputStream inputStream = new URL(
                 "https://api.spigotmc.org/legacy/update.php?resource=" + this.resourceId).openStream();

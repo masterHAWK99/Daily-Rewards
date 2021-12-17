@@ -27,7 +27,7 @@ public class Main extends JavaPlugin implements Listener {
         settings = new SettingsManager(this);
 
         registerEvents();
-        if (SettingsManager.getConfig().getBoolean("mysql.enabled")) {
+        if (settings.getConfiguration().mysql.enabled) {
             MySQLManager.mysqlSetup();
             MySQLManager.createTable();
             for (Player player : Bukkit.getOnlinePlayers()) {

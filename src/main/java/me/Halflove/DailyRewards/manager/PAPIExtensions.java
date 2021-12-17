@@ -33,13 +33,13 @@ public class PAPIExtensions extends PlaceholderExpansion {
         String ip = player.getAddress().getAddress().getHostAddress();
         ip = ip.replace(".", "-");
         long current = System.currentTimeMillis();
-        if (SettingsManager.getConfig().getBoolean("mysql.enabled")) {
-            if (!SettingsManager.getConfig().getBoolean("savetoip")) {
+        if (plugin.getSettings().getConfiguration().mysql.enabled) {
+            if (!plugin.getSettings().getConfiguration().saveToIp) {
                 releaseip = MySQLManager.getCooldownUUID(player.getUniqueId());
             } else {
                 releaseip = MySQLManager.getCooldownIP(ip);
             }
-        } else if (!SettingsManager.getConfig().getBoolean("savetoip")) {
+        } else if (!plugin.getSettings().getConfiguration().saveToIp) {
             releaseip = SettingsManager.getData().getLong(player.getUniqueId() + ".millis");
         } else {
             releaseip = SettingsManager.getData().getLong(ip + ".millis");
@@ -59,7 +59,7 @@ public class PAPIExtensions extends PlaceholderExpansion {
         }
         if (identifier.equals("player_test_qualification")) {
             boolean output;
-            if (!SettingsManager.getConfig().getBoolean("savetoip")) {
+            if (!plugin.getSettings().getConfiguration().saveToIp) {
                 output = CooldownManager.getAllowRewardip(player);
             } else {
                 output = CooldownManager.getAllowRewardUUID(player);
