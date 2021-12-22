@@ -13,8 +13,6 @@ import org.bukkit.plugin.Plugin;
 
 public class SettingsManager {
 
-    // TODO: do something with it when changing the storage system
-    private static Config data;
     private final ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory()).configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
     private final Plugin plugin;
     private MessagesConfig messagesConfig;
@@ -24,11 +22,6 @@ public class SettingsManager {
         this.plugin = plugin;
 
         setup();
-    }
-
-    // TODO: do something with it when changing the storage system
-    public static Config getData() {
-        return data;
     }
 
     public MessagesConfig getMessagesConfig() {
@@ -89,8 +82,5 @@ public class SettingsManager {
 
         loadConfigs();
         saveConfigs();
-
-        // TODO: do something with it when changing the storage system
-        data = new Config(plugin.getDataFolder(), "data.yml");
     }
 }

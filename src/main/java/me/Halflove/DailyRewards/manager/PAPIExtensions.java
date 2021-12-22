@@ -29,22 +29,7 @@ public class PAPIExtensions extends PlaceholderExpansion {
     }
 
     public String onPlaceholderRequest(Player player, String identifier) {
-        long releaseip;
-        String ip = player.getAddress().getAddress().getHostAddress();
-        ip = ip.replace(".", "-");
-        long current = System.currentTimeMillis();
-        if (plugin.getSettings().getConfiguration().mysql.enabled) {
-            if (!plugin.getSettings().getConfiguration().saveToIp) {
-                releaseip = MySQLManager.getCooldownUUID(player.getUniqueId());
-            } else {
-                releaseip = MySQLManager.getCooldownIP(ip);
-            }
-        } else if (!plugin.getSettings().getConfiguration().saveToIp) {
-            releaseip = SettingsManager.getData().getLong(player.getUniqueId() + ".millis");
-        } else {
-            releaseip = SettingsManager.getData().getLong(ip + ".millis");
-        }
-        long millis = releaseip - current;
+        long millis = plugin.getData().getTime(player) - System.currentTimeMillis();
         if (identifier.equals("remaining_time")) {
             return DateUtils.getRemainingTime(millis);
         }
@@ -58,13 +43,7 @@ public class PAPIExtensions extends PlaceholderExpansion {
             return DateUtils.getRemainingSec(millis);
         }
         if (identifier.equals("player_test_qualification")) {
-            boolean output;
-            if (!plugin.getSettings().getConfiguration().saveToIp) {
-                output = CooldownManager.getAllowRewardip(player);
-            } else {
-                output = CooldownManager.getAllowRewardUUID(player);
-            }
-            if (output) {
+            if (System.currentTimeMillis() > plugin.getData().getTime(player)) {
                 return plugin.getSettings().getMessagesConfig().papiPlaceholders.rewardAvailable;
             }
             return plugin.getSettings().getMessagesConfig().papiPlaceholders.noRewards;

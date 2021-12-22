@@ -1,9 +1,6 @@
 package me.Halflove.DailyRewards.command;
 
 import me.Halflove.DailyRewards.Main;
-import me.Halflove.DailyRewards.manager.CooldownManager;
-import me.Halflove.DailyRewards.manager.MySQLManager;
-import me.Halflove.DailyRewards.manager.SettingsManager;
 import me.Halflove.DailyRewards.util.MessageUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -11,7 +8,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class AdminCommands implements CommandExecutor {
     private final Main plugin;
@@ -35,30 +31,16 @@ public class AdminCommands implements CommandExecutor {
                     return true;
                 }
                 if (args[0].equalsIgnoreCase("reload")) {
-                    final boolean startmysql;
-                    startmysql = !plugin.getSettings().getConfiguration().mysql.enabled;
-                    SettingsManager.getData().reload();
-                    plugin.getSettings().loadConfigs();
                     sender.sendMessage(ChatColor.YELLOW + "DailyRewards is reloading...");
-                    (new BukkitRunnable() {
-                        public void run() {
-                            if (plugin.getSettings().getConfiguration().mysql.enabled) {
-                                if (startmysql) {
-                                    MySQLManager.mysqlSetup();
-                                    MySQLManager.createTable();
-                                } else {
-                                    MySQLManager.createTable();
-                                }
-                            }
-                            sender.sendMessage(ChatColor.GREEN + "DailyRewards has been successfully reloaded.");
-                        }
-                    }).runTaskLater(this.plugin, 20L);
+                    // TODO: Move loadConfigs to the main class and add a data provider
+                    plugin.getSettings().loadConfigs();
+                    sender.sendMessage(ChatColor.GREEN + "DailyRewards has been successfully reloaded.");
                 }
                 if (args[0].equalsIgnoreCase("reset")) {
                     if (sender instanceof Player) {
                         if (args.length == 1) {
                             Player player = (Player) sender;
-                            CooldownManager.updateTime(player, 0L);
+                            plugin.getData().saveTime(player, 0L);
                             sender.sendMessage(ChatColor.GREEN + "You reset your cooldown.");
                         }
                     } else {
@@ -71,7 +53,7 @@ public class AdminCommands implements CommandExecutor {
                             sender.sendMessage(ChatColor.RED + "The specified player is offline.");
                             return true;
                         }
-                        CooldownManager.updateTime(target, 0L);
+                        plugin.getData().saveTime(target, 0L);
                         sender.sendMessage(ChatColor.GREEN + "You reset " + target.getName() + "'s cooldown.");
                     }
                 }

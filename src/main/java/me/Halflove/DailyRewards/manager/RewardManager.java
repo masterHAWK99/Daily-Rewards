@@ -40,8 +40,7 @@ public class RewardManager {
 
             long toSet = Math.abs(System.currentTimeMillis())
                 + Math.abs(plugin.getSettings().getConfiguration().cooldown);
-            CooldownManager.updateTime(player, toSet);
-            SettingsManager.getData().save();
+            plugin.getData().saveTime(player, toSet);
 
             String claim = reward.message;
             claim = claim.replace("%name%", reward.name);

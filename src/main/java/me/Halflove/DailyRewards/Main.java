@@ -2,13 +2,12 @@ package me.Halflove.DailyRewards;
 
 import me.Halflove.DailyRewards.command.AdminCommands;
 import me.Halflove.DailyRewards.command.RewardCommands;
+import me.Halflove.DailyRewards.data.Data;
 import me.Halflove.DailyRewards.listener.PlayerJoinListener;
-import me.Halflove.DailyRewards.manager.MySQLManager;
 import me.Halflove.DailyRewards.manager.PAPIExtensions;
 import me.Halflove.DailyRewards.manager.SettingsManager;
 import me.Halflove.DailyRewards.manager.UpdateChecker;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,22 +17,19 @@ public class Main extends JavaPlugin implements Listener {
 
     private SettingsManager settings;
 
+    private Data data;
+
     private UpdateChecker updateChecker;
 
     public void onEnable() {
+        settings = new SettingsManager(this);
+
+        data = Data.getDataProvider(this);
+
         getCommand("dailyrewards").setExecutor(new AdminCommands(this));
         getCommand("reward").setExecutor(new RewardCommands(this));
 
-        settings = new SettingsManager(this);
-
         registerEvents();
-        if (settings.getConfiguration().mysql.enabled) {
-            MySQLManager.mysqlSetup();
-            MySQLManager.createTable();
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                MySQLManager.createPlayer(player);
-            }
-        }
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             papi = true;
             new PAPIExtensions().register();
@@ -55,6 +51,10 @@ public class Main extends JavaPlugin implements Listener {
 
     public SettingsManager getSettings() {
         return settings;
+    }
+
+    public Data getData() {
+        return data;
     }
 
     public UpdateChecker getUpdateChecker() {

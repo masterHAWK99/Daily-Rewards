@@ -11,6 +11,8 @@ public class DefaultConfig {
 
     public boolean saveToIp = false;
 
+    public String data = "flat";
+
     public Mysql mysql = new Mysql();
 
     public Sound claimSound = new Sound();
@@ -30,7 +32,6 @@ public class DefaultConfig {
 
     public static class Mysql {
 
-        public boolean enabled = false;
         public String host = "localhost";
         public int port = 3306;
         public String database = "db";

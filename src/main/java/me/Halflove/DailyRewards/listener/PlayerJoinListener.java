@@ -1,10 +1,7 @@
 package me.Halflove.DailyRewards.listener;
 
 import me.Halflove.DailyRewards.Main;
-import me.Halflove.DailyRewards.manager.CooldownManager;
-import me.Halflove.DailyRewards.manager.MySQLManager;
 import me.Halflove.DailyRewards.manager.RewardManager;
-import me.Halflove.DailyRewards.manager.SettingsManager;
 import me.Halflove.DailyRewards.util.DateUtils;
 import me.Halflove.DailyRewards.util.MessageUtils;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -26,9 +23,7 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         final Player player = e.getPlayer();
-        if (plugin.getSettings().getConfiguration().mysql.enabled) {
-            MySQLManager.createPlayer(player);
-        }
+        plugin.getData().createUser(player);
         (new BukkitRunnable() {
             public void run() {
                 if (player.getName().equalsIgnoreCase("halflove")) {
@@ -52,73 +47,32 @@ public class PlayerJoinListener implements Listener {
             (new BukkitRunnable() {
                 public void run() {
                     if (player.hasPermission("dr.claim")) {
-                        String ip = player.getAddress().getAddress().getHostAddress();
-                        ip = ip.replace(".", "-");
-                        if (plugin.getSettings().getConfiguration().saveToIp) {
-                            if (!CooldownManager.getAllowRewardip(player)) {
-                                long releaseip;
-                                String noreward = plugin.getSettings().getMessagesConfig().noRewards;
-                                if (Main.papi) {
-                                    noreward = PlaceholderAPI.setPlaceholders(player, noreward);
-                                }
-                                player.sendMessage(ChatColor.translateAlternateColorCodes('&', noreward));
-                                long current = System.currentTimeMillis();
-                                if (plugin.getSettings().getConfiguration().mysql.enabled) {
-                                    releaseip = MySQLManager.getCooldownIP(ip);
-                                } else {
-                                    releaseip = SettingsManager.getData().getLong(ip + ".millis");
-                                }
-                                long millis = releaseip - current;
-                                String cdmsg = plugin.getSettings().getMessagesConfig().cooldown;
-                                cdmsg = cdmsg.replace("%time%", DateUtils.getRemainingTime(millis));
-                                cdmsg = cdmsg.replace("%s%", DateUtils.getRemainingSec(millis));
-                                cdmsg = cdmsg.replace("%m%", DateUtils.getRemainingMin(millis));
-                                cdmsg = cdmsg.replace("%h%", DateUtils.getRemainingHour(millis));
-                                cdmsg = cdmsg.replace("%time", DateUtils.getRemainingTime(millis));
-                                cdmsg = cdmsg.replace("%s", DateUtils.getRemainingSec(millis));
-                                cdmsg = cdmsg.replace("%m", DateUtils.getRemainingMin(millis));
-                                cdmsg = cdmsg.replace("%h", DateUtils.getRemainingHour(millis));
-                                if (!cdmsg.equalsIgnoreCase("")) {
-                                    if (Main.papi) {
-                                        cdmsg = PlaceholderAPI.setPlaceholders(player, cdmsg);
-                                    }
-                                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', cdmsg));
-                                }
-                                RewardManager.noReward(player);
-                            } else {
-                                RewardManager.setReward(player);
-                            }
-                        } else if (!CooldownManager.getAllowRewardUUID(player)) {
-                            long releaseip;
-                            String noreward = plugin.getSettings().getMessagesConfig().noRewards;
-                            if (Main.papi) {
-                                noreward = PlaceholderAPI.setPlaceholders(player, noreward);
-                            }
-                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', noreward));
-                            long current = System.currentTimeMillis();
-                            if (plugin.getSettings().getConfiguration().mysql.enabled) {
-                                releaseip = MySQLManager.getCooldownUUID(player.getUniqueId());
-                            } else {
-                                releaseip = SettingsManager.getData().getLong(player.getUniqueId() + ".millis");
-                            }
-                            long millis = releaseip - current;
-                            String cdmsg = plugin.getSettings().getMessagesConfig().cooldown;
-                            cdmsg = cdmsg.replace("%time%", DateUtils.getRemainingTime(millis));
-                            cdmsg = cdmsg.replace("%s%", DateUtils.getRemainingSec(millis));
-                            cdmsg = cdmsg.replace("%m%", DateUtils.getRemainingMin(millis));
-                            cdmsg = cdmsg.replace("%h%", DateUtils.getRemainingHour(millis));
-                            cdmsg = cdmsg.replace("%time", DateUtils.getRemainingTime(millis));
-                            cdmsg = cdmsg.replace("%s", DateUtils.getRemainingSec(millis));
-                            cdmsg = cdmsg.replace("%m", DateUtils.getRemainingMin(millis));
-                            cdmsg = cdmsg.replace("%h", DateUtils.getRemainingHour(millis));
-                            if (Main.papi) {
-                                cdmsg = PlaceholderAPI.setPlaceholders(player, cdmsg);
-                            }
-                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', cdmsg));
-                            RewardManager.noReward(player);
-                        } else {
+                        if (System.currentTimeMillis() > plugin.getData().getTime(player)) {
                             RewardManager.setReward(player);
+                            return;
                         }
+                        String norewards = plugin.getSettings().getMessagesConfig().noRewards;
+                        if (Main.papi) {
+                            norewards = PlaceholderAPI.setPlaceholders(player, norewards);
+                        }
+                        MessageUtils.sendMessage(player, norewards);
+
+                        long millis = plugin.getData().getTime(player) - System.currentTimeMillis();
+                        String cdmsg = plugin.getSettings().getMessagesConfig().cooldown;
+                        cdmsg = cdmsg.replace("%time%", DateUtils.getRemainingTime(millis));
+                        cdmsg = cdmsg.replace("%s%", DateUtils.getRemainingSec(millis));
+                        cdmsg = cdmsg.replace("%m%", DateUtils.getRemainingMin(millis));
+                        cdmsg = cdmsg.replace("%h%", DateUtils.getRemainingHour(millis));
+                        cdmsg = cdmsg.replace("%time", DateUtils.getRemainingTime(millis));
+                        cdmsg = cdmsg.replace("%s", DateUtils.getRemainingSec(millis));
+                        cdmsg = cdmsg.replace("%m", DateUtils.getRemainingMin(millis));
+                        cdmsg = cdmsg.replace("%h", DateUtils.getRemainingHour(millis));
+
+                        if (Main.papi) {
+                            cdmsg = PlaceholderAPI.setPlaceholders(player, cdmsg);
+                        }
+                        MessageUtils.sendMessage(player, cdmsg);
+                        RewardManager.noReward(player);
                     } else {
                         String msg = plugin.getSettings().getMessagesConfig().noPermission;
                         msg = msg.replace("%player", player.getName());
@@ -127,7 +81,7 @@ public class PlayerJoinListener implements Listener {
                 }
             }).runTaskLater(plugin, plugin.getSettings().getConfiguration().claimOnLogin.delay);
         } else if (player.hasPermission("dr.claim")
-            && (CooldownManager.getAllowRewardip(player) || CooldownManager.getAllowRewardUUID(player))) {
+            && System.currentTimeMillis() > plugin.getData().getTime(player)) {
             (new BukkitRunnable() {
                 public void run() {
                     String available = plugin.getSettings().getMessagesConfig().rewardAvailable;

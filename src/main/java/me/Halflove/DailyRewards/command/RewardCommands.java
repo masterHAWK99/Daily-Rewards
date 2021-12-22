@@ -1,9 +1,8 @@
 package me.Halflove.DailyRewards.command;
 
 import me.Halflove.DailyRewards.Main;
-import me.Halflove.DailyRewards.manager.CooldownManager;
+import me.Halflove.DailyRewards.data.Data;
 import me.Halflove.DailyRewards.manager.RewardManager;
-import me.Halflove.DailyRewards.manager.SettingsManager;
 import me.Halflove.DailyRewards.util.DateUtils;
 import me.Halflove.DailyRewards.util.MessageUtils;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -24,21 +23,12 @@ public class RewardCommands implements CommandExecutor {
         Player player = (Player) sender;
 
         if (player.hasPermission("dr.claim")) {
-            if (plugin.getSettings().getConfiguration().saveToIp) {
-                if (!CooldownManager.getAllowRewardip(player)) {
-                    long millis = CooldownManager.getTimeIp(player) - System.currentTimeMillis();
-                    noRewardsMessage(player, millis);
-                    RewardManager.noReward(player);
-                } else {
-                    RewardManager.setReward(player);
-                }
-            } else if (!CooldownManager.getAllowRewardUUID(player)) {
-                long millis = CooldownManager.getTimeUuid(player) - System.currentTimeMillis();
-                noRewardsMessage(player, millis);
-                RewardManager.noReward(player);
-            } else {
+            if (System.currentTimeMillis() > plugin.getData().getTime(player)) {
                 RewardManager.setReward(player);
+                return true;
             }
+            noRewardsMessage(player, plugin.getData().getTime(player) - System.currentTimeMillis());
+            RewardManager.noReward(player);
         } else {
             String msg = plugin.getSettings().getMessagesConfig().noPermission;
             if (Main.papi) {
