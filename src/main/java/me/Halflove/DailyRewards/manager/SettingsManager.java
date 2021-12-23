@@ -2,6 +2,7 @@ package me.Halflove.DailyRewards.manager;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +14,9 @@ import org.bukkit.plugin.Plugin;
 
 public class SettingsManager {
 
-    private final ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory()).configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
+    private final ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory())
+        .configure(JsonParser.Feature.IGNORE_UNDEFINED, true)
+        .setPropertyNamingStrategy(PropertyNamingStrategies.KEBAB_CASE);
     private final Plugin plugin;
     private MessagesConfig messagesConfig;
     private DefaultConfig defaultConfig;
