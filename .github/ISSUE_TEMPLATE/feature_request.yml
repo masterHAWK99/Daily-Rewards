@@ -5,7 +5,7 @@ body:
   - type: textarea
     id: request
     attributes:
-      label: ""
+      label: "Description"
       description: Is your feature request related to a problem? Please describe.
       placeholder: A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
     validations:
@@ -13,7 +13,7 @@ body:
   - type: textarea
     id: solution
     attributes:
-      label: ""
+      label: "Solution"
       description: Describe the solution you'd like
       placeholder: A clear and concise description of what you want to happen.
     validations:
@@ -21,16 +21,15 @@ body:
   - type: textarea
     id: alternatives
     attributes:
-      label: ""
+      label: "Alternatives"
       description: Describe alternatives you've considered
       placeholder: A clear and concise description of any alternative solutions or features you've considered.
     validations:
-      required: true
+      required: false
   - type: textarea
     id: context
     attributes:
-      label: ""
-      description: Additional context
+      label: "Additional context"
       placeholder: Add any other context or screenshots about the feature request here.
     validations:
-      required: true
+      required: false
