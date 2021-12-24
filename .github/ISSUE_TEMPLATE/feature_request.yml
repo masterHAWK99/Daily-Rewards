@@ -8,7 +8,6 @@ body:
       label: ""
       description: Is your feature request related to a problem? Please describe.
       placeholder: A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
-      value: ""
     validations:
       required: true
   - type: textarea
@@ -17,7 +16,6 @@ body:
       label: ""
       description: Describe the solution you'd like
       placeholder: A clear and concise description of what you want to happen.
-      value: ""
     validations:
       required: true
   - type: textarea
@@ -26,7 +24,6 @@ body:
       label: ""
       description: Describe alternatives you've considered
       placeholder: A clear and concise description of any alternative solutions or features you've considered.
-      value: ""
     validations:
       required: true
   - type: textarea
