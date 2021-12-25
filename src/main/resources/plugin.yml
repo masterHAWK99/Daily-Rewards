@@ -3,7 +3,7 @@ author: Halflove
 main: me.Halflove.DailyRewards.Main
 version: 2.0.0
 softdepend: [PlaceholderAPI]
-api-version: 1.16
+api-version: 1.13
 
 commands:
   dailyrewards:
