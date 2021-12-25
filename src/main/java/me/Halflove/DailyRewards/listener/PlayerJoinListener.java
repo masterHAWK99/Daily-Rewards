@@ -63,10 +63,6 @@ public class PlayerJoinListener implements Listener {
                         cdmsg = cdmsg.replace("%s%", DateUtils.getRemainingSec(millis));
                         cdmsg = cdmsg.replace("%m%", DateUtils.getRemainingMin(millis));
                         cdmsg = cdmsg.replace("%h%", DateUtils.getRemainingHour(millis));
-                        cdmsg = cdmsg.replace("%time", DateUtils.getRemainingTime(millis));
-                        cdmsg = cdmsg.replace("%s", DateUtils.getRemainingSec(millis));
-                        cdmsg = cdmsg.replace("%m", DateUtils.getRemainingMin(millis));
-                        cdmsg = cdmsg.replace("%h", DateUtils.getRemainingHour(millis));
 
                         if (Main.papi) {
                             cdmsg = PlaceholderAPI.setPlaceholders(player, cdmsg);
