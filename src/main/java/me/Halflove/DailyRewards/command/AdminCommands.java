@@ -37,25 +37,26 @@ public class AdminCommands implements CommandExecutor {
                     sender.sendMessage(ChatColor.GREEN + "DailyRewards has been successfully reloaded.");
                 }
                 if (args[0].equalsIgnoreCase("reset")) {
-                    if (sender instanceof Player) {
-                        if (args.length == 1) {
+                    if (args.length == 1) {
+                        if (sender instanceof Player) {
                             Player player = (Player) sender;
                             plugin.getData().saveTime(player, 0L);
                             sender.sendMessage(ChatColor.GREEN + "You reset your cooldown.");
+                        } else {
+                            sender.sendMessage(ChatColor.RED + "Oops, you can't do this in console");
+                            sender.sendMessage(ChatColor.RED + "Try '/dr reset (player)' instead");
                         }
-                    } else {
-                        sender.sendMessage(ChatColor.RED + "Oops, you can't do this in console");
-                        sender.sendMessage(ChatColor.RED + "Try '/dr reset (player)' instead");
+
+                        return true;
                     }
-                    if (args.length == 2) {
-                        Player target = Bukkit.getServer().getPlayer(args[1]);
-                        if (target == null) {
-                            sender.sendMessage(ChatColor.RED + "The specified player is offline.");
-                            return true;
-                        }
-                        plugin.getData().saveTime(target, 0L);
-                        sender.sendMessage(ChatColor.GREEN + "You reset " + target.getName() + "'s cooldown.");
+
+                    Player target = Bukkit.getServer().getPlayer(args[1]);
+                    if (target == null) {
+                        sender.sendMessage(ChatColor.RED + "The specified player is offline.");
+                        return true;
                     }
+                    plugin.getData().saveTime(target, 0L);
+                    sender.sendMessage(ChatColor.GREEN + "You reset " + target.getName() + "'s cooldown.");
                 }
                 return true;
             }
