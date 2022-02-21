@@ -8,10 +8,9 @@ import me.Halflove.DailyRewards.manager.PAPIExtensions;
 import me.Halflove.DailyRewards.manager.SettingsManager;
 import me.Halflove.DailyRewards.manager.UpdateChecker;
 import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Main extends JavaPlugin implements Listener {
+public class Main extends JavaPlugin {
 
     public static boolean papi;
 
@@ -30,6 +29,7 @@ public class Main extends JavaPlugin implements Listener {
         getCommand("reward").setExecutor(new RewardCommands(this));
 
         registerEvents();
+
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             papi = true;
             new PAPIExtensions().register();
@@ -63,7 +63,6 @@ public class Main extends JavaPlugin implements Listener {
 
     private void registerEvents() {
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(this), this);
-        Bukkit.getPluginManager().registerEvents(this, this);
     }
 }
 
