@@ -37,6 +37,8 @@ public class DefaultConfig {
         public String database = "db";
         public String user = "root";
         public String password = "pass";
+        public int maxLifetime = 600;
+        public boolean useSsl = false;
     }
 
     public static class Sound {
