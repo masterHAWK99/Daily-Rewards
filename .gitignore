@@ -1,3 +1,6 @@
 .idea
 /Daily-Rewards.iml
+
+## maven
 /target/
+/dependency-reduced-pom.xml
