@@ -35,7 +35,7 @@ public class RewardCommands implements CommandExecutor {
                 msg = PlaceholderAPI.setPlaceholders(player, msg);
             }
             msg = msg.replace("%player", player.getName());
-            MessageUtils.sendMessage(player, msg);
+            MessageUtils.sendMessageWithPrefix(player, msg);
         }
 
         return true;
@@ -46,7 +46,7 @@ public class RewardCommands implements CommandExecutor {
         if (Main.papi) {
             norewards = PlaceholderAPI.setPlaceholders(player, norewards);
         }
-        MessageUtils.sendMessage(player, norewards);
+        MessageUtils.sendMessageWithPrefix(player, norewards);
 
         String cdmsg = plugin.getSettings().getMessagesConfig().cooldown;
         cdmsg = cdmsg.replace("%time%", DateUtils.getRemainingTime(millis));
@@ -57,7 +57,7 @@ public class RewardCommands implements CommandExecutor {
         if (Main.papi) {
             cdmsg = PlaceholderAPI.setPlaceholders(player, cdmsg);
         }
-        MessageUtils.sendMessage(player, cdmsg);
+        MessageUtils.sendMessageWithPrefix(player, cdmsg);
     }
 }
 

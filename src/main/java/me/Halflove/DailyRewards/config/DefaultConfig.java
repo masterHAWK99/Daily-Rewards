@@ -7,6 +7,8 @@ public class DefaultConfig {
 
     public boolean updateCheck = true;
 
+    public String prefix = "&aDaily&f: ";
+
     public long cooldown = 846000;
 
     public boolean saveToIp = false;
@@ -24,7 +26,7 @@ public class DefaultConfig {
         new Reward("Advanced",
             true,
             true,
-            "&aRewards&f: You claimed the &7%name%&f daily reward!",
+            "&fYou claimed the &7%name%&f daily reward!",
             "",
             Arrays.asList("give %player minecraft:diamond 1;say %player earned a common diamond",
                 "give %player minecraft:emerald 1;say %player earned a rare emerald")));
@@ -67,7 +69,7 @@ public class DefaultConfig {
         public String name = "Basic";
         public boolean random = false;
         public boolean permission = false;
-        public String message = "&aRewards&f: You claimed the &7%name%&f daily reward!";
+        public String message = "&fYou claimed the &7%name%&f daily reward!";
         public String broadcastMessage = "";
         public List<String> commands = Arrays.asList("give %player minecraft:diamond 1");
 

@@ -7,6 +7,7 @@ import me.Halflove.DailyRewards.listener.PlayerJoinListener;
 import me.Halflove.DailyRewards.manager.PAPIExtensions;
 import me.Halflove.DailyRewards.manager.SettingsManager;
 import me.Halflove.DailyRewards.manager.UpdateChecker;
+import me.Halflove.DailyRewards.util.MessageUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -47,6 +48,8 @@ public class Main extends JavaPlugin {
                 getLogger().severe("*** Update Here: https://www.spigotmc.org/resources/daily-rewards.16708/ ***");
             }
         });
+
+        MessageUtils.setConfig(settings);
     }
 
     public SettingsManager getSettings() {

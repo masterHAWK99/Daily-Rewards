@@ -1,5 +1,7 @@
 package me.Halflove.DailyRewards.manager;
 
+import static me.Halflove.DailyRewards.util.MessageUtils.sendMessageWithPrefix;
+
 import com.google.common.base.Splitter;
 import java.util.List;
 import java.util.Random;
@@ -47,7 +49,7 @@ public class RewardManager {
             if (Main.papi) {
                 claim = PlaceholderAPI.setPlaceholders(player, claim);
             }
-            MessageUtils.sendMessage(player, claim);
+            sendMessageWithPrefix(player, claim);
             if (!reward.broadcastMessage.equalsIgnoreCase("")) {
                 String msg = reward.broadcastMessage;
                 msg = msg.replace("%player", player.getName());

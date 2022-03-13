@@ -62,7 +62,7 @@ public class AdminCommands implements CommandExecutor {
             }
             String msg = plugin.getSettings().getMessagesConfig().noPermission;
             msg = msg.replace("%player", sender.getName());
-            MessageUtils.sendMessage(sender, msg);
+            MessageUtils.sendMessageWithPrefix(sender, msg);
         }
         return true;
     }

@@ -55,7 +55,7 @@ public class PlayerJoinListener implements Listener {
                         if (Main.papi) {
                             norewards = PlaceholderAPI.setPlaceholders(player, norewards);
                         }
-                        MessageUtils.sendMessage(player, norewards);
+                        MessageUtils.sendMessageWithPrefix(player, norewards);
 
                         long millis = plugin.getData().getTime(player) - System.currentTimeMillis();
                         String cdmsg = plugin.getSettings().getMessagesConfig().cooldown;
@@ -67,12 +67,12 @@ public class PlayerJoinListener implements Listener {
                         if (Main.papi) {
                             cdmsg = PlaceholderAPI.setPlaceholders(player, cdmsg);
                         }
-                        MessageUtils.sendMessage(player, cdmsg);
+                        MessageUtils.sendMessageWithPrefix(player, cdmsg);
                         RewardManager.noReward(player);
                     } else {
                         String msg = plugin.getSettings().getMessagesConfig().noPermission;
                         msg = msg.replace("%player", player.getName());
-                        MessageUtils.sendMessage(player, msg);
+                        MessageUtils.sendMessageWithPrefix(player, msg);
                     }
                 }
             }).runTaskLater(plugin, plugin.getSettings().getConfiguration().claimOnLogin.delay);
@@ -84,7 +84,7 @@ public class PlayerJoinListener implements Listener {
                     if (Main.papi) {
                         available = PlaceholderAPI.setPlaceholders(player, available);
                     }
-                    MessageUtils.sendMessage(player, available);
+                    MessageUtils.sendMessageWithPrefix(player, available);
                 }
             }).runTaskLater(plugin, 50L);
         }
