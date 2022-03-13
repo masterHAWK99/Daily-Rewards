@@ -33,7 +33,7 @@ public class Main extends JavaPlugin {
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             papi = true;
-            new PAPIExtensions().register();
+            new PAPIExtensions(this).register();
         } else {
             papi = false;
         }

@@ -6,7 +6,11 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
 public class PAPIExtensions extends PlaceholderExpansion {
-    static Main plugin = Main.getPlugin(Main.class);
+    private Main plugin;
+
+    public PAPIExtensions(Main plugin) {
+        this.plugin = plugin;
+    }
 
     public boolean persist() {
         return true;
