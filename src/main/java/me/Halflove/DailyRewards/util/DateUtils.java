@@ -1,102 +1,67 @@
 package me.Halflove.DailyRewards.util;
 
+import java.util.concurrent.TimeUnit;
+
 public final class DateUtils {
 
-    public static String formatTime(long secs) {
-        String str;
-        long seconds = secs;
-        long minutes = 0L;
-        while (seconds >= 60L) {
-            seconds -= 60L;
-            minutes++;
-        }
-        long hours = 0L;
-        while (minutes >= 60L) {
-            minutes -= 60L;
-            hours++;
-        }
-        if (hours != 0L) {
-            if (hours > 1L) {
-                str = hours + " Hours";
-            } else if (minutes > 61L) {
-                str = hours + " Hour " + minutes + " Minutes";
-            } else if (minutes == 61L) {
-                str = hours + " Hour " + minutes + " Minute";
-            } else {
-                str = hours + " Hour";
-            }
-        } else if (minutes != 0L) {
-            if (seconds == 0L) {
-                if (minutes == 1L) {
-                    str = minutes + " Minute";
-                } else {
-                    str = minutes + " Minutes";
-                }
-            } else if (minutes == 1L) {
-                if (seconds == 1L) {
-                    str = minutes + " Minute " + seconds + " Second";
-                } else {
-                    str = minutes + " Minute " + seconds + " Seconds";
-                }
-            } else if (seconds == 1L) {
-                str = minutes + " Minutes " + seconds + " Second";
-            } else {
-                str = minutes + " Minutes " + seconds + " Seconds";
-            }
-        } else if (seconds == 1L) {
-            str = seconds + " Second";
-        } else {
-            str = seconds + " Seconds";
-        }
-        if (secs <= 0L) {
-            str = "0 Seconds";
-        }
-        return str;
-    }
-
+    /**
+     * Gets milliseconds in formatted manner.
+     * E.g. 1 hour, 37 minutes, 21 seconds
+     *
+     * @param millis milliseconds to be formatted
+     * @return time in formatted manner
+     */
     public static String getRemainingTime(long millis) {
-        long seconds = millis / 1000L;
-        return formatTime(seconds);
+        StringBuilder stringBuilder = new StringBuilder();
+
+        long hours = TimeUnit.MILLISECONDS.toHours(millis);
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis) % 60;
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis) % 60;
+
+        if (hours > 0L) {
+            stringBuilder.append(hours).append(hours > 1L ? " hours" : " hour");
+        }
+
+        if (minutes > 0L) {
+            stringBuilder.append(" ");
+            stringBuilder.append(minutes).append(minutes > 1L ? " minutes" : " minute");
+        }
+
+        if (seconds > 0L) {
+            stringBuilder.append(" ");
+            stringBuilder.append(seconds).append(seconds > 1L ? " seconds" : " second");
+        }
+
+        return stringBuilder.toString();
     }
 
+    /**
+     * Gets second-of-minute converted from milliseconds.
+     *
+     * @param millis milliseconds to be converted
+     * @return the second-of-minute, from 0 to 59
+     */
     public static String getRemainingSec(long millis) {
-        long seconds = millis / 1000L;
-        long minutes = 0L;
-        while (seconds > 60L) {
-            seconds -= 60L;
-            minutes++;
-        }
-        while (minutes > 60L) {
-            minutes -= 60L;
-        }
-        return (new StringBuilder(String.valueOf(seconds))).toString();
+        return String.valueOf(TimeUnit.MILLISECONDS.toSeconds(millis) % 60);
     }
 
+    /**
+     * Gets minute-of-hour converted from milliseconds.
+     *
+     * @param millis milliseconds to be converted
+     * @return the minute-of-hour, from 0 to 59
+     */
     public static String getRemainingMin(long millis) {
-        long seconds = millis / 1000L;
-        long minutes = 0L;
-        while (seconds > 60L) {
-            seconds -= 60L;
-            minutes++;
-        }
-        while (minutes > 60L) {
-            minutes -= 60L;
-        }
-        return (new StringBuilder(String.valueOf(minutes))).toString();
+        return String.valueOf(TimeUnit.MILLISECONDS.toMinutes(millis) % 60);
     }
 
+    /**
+     * Gets hours converted from milliseconds.
+     *
+     * @param millis milliseconds to be converted
+     * @return hours converted from milliseconds
+     */
     public static String getRemainingHour(long millis) {
-        long seconds = millis / 1000L;
-        long minutes = 0L;
-        while (seconds > 60L) {
-            seconds -= 60L;
-            minutes++;
-        }
-        long hours = 0L;
-        while (minutes > 60L) {
-            minutes -= 60L;
-            hours++;
-        }
-        return (new StringBuilder(String.valueOf(hours))).toString();
+        return String.valueOf(TimeUnit.MILLISECONDS.toHours(millis));
     }
 }
