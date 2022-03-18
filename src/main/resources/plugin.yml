@@ -13,4 +13,4 @@ commands:
   reward:
     usage: /<command>
     description: Claim a reward.
-    aliases: [claim, rewards, claimreward, claimrewards]
+    aliases: [daily, claim, rewards, claimreward, claimrewards]
