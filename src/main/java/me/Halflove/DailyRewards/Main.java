@@ -38,16 +38,8 @@ public class Main extends JavaPlugin {
             papi = false;
         }
 
-        updateChecker = new UpdateChecker(this, 16708);
-        updateChecker.checkVersion((version, pluginVersion) -> {
-            if (pluginVersion.equalsIgnoreCase(version)) {
-                getLogger().info("Plugin is up to date.");
-            } else {
-                getLogger().severe("*** Daily Rewards is Outdated! ***");
-                getLogger().severe("*** You're on " + pluginVersion + " while " + version + " is available! ***");
-                getLogger().severe("*** Update Here: https://www.spigotmc.org/resources/daily-rewards.16708/ ***");
-            }
-        });
+        updateChecker = new UpdateChecker(this);
+        updateChecker.runCheckVersionTask();
 
         MessageUtils.setConfig(settings);
     }

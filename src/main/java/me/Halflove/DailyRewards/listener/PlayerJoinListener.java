@@ -31,15 +31,7 @@ public class PlayerJoinListener implements Listener {
                         + plugin.getDescription().getVersion());
                 }
                 if (player.isOp()) {
-                    plugin.getUpdateChecker().checkVersion((version, pluginVersion) -> {
-                        if (!pluginVersion.equalsIgnoreCase(version)) {
-                            player.sendMessage(ChatColor.GOLD + "*** Daily Rewards is Outdated! ***");
-                            player.sendMessage(
-                                ChatColor.YELLOW + "You're on " + ChatColor.WHITE + pluginVersion + ChatColor.YELLOW + " while " + ChatColor.WHITE + version + ChatColor.YELLOW
-                                    + " is available!");
-                            player.sendMessage(ChatColor.YELLOW + "Update Here: " + ChatColor.WHITE + "https://bit.ly/3x2Ma4S");
-                        }
-                    });
+                    plugin.getUpdateChecker().checkVersion(player);
                 }
             }
         }).runTaskLater(plugin, 50L);
