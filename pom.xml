@@ -63,6 +63,12 @@
             <artifactId>gson</artifactId>
             <version>2.9.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>3.0.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
     <build>
         <defaultGoal>clean install</defaultGoal>
@@ -88,6 +94,10 @@
                                 <relocation>
                                     <pattern>com.fasterxml.jackson</pattern>
                                     <shadedPattern>me.Halflove.DailyRewards.jackson</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.bstats</pattern>
+                                    <shadedPattern>me.Halflove.DailyRewards.bstats</shadedPattern>
                                 </relocation>
                             </relocations>
                             <transformers>

@@ -8,6 +8,7 @@ import me.Halflove.DailyRewards.manager.PAPIExtensions;
 import me.Halflove.DailyRewards.manager.SettingsManager;
 import me.Halflove.DailyRewards.manager.UpdateChecker;
 import me.Halflove.DailyRewards.util.MessageUtils;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -42,6 +43,8 @@ public class Main extends JavaPlugin {
         updateChecker.runCheckVersionTask();
 
         MessageUtils.setConfig(settings);
+
+        new Metrics(this, 14675);
     }
 
     public SettingsManager getSettings() {
