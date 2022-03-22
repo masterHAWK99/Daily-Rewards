@@ -42,12 +42,28 @@ public abstract class Data {
     public abstract long getTime(Player player);
 
     /**
+     * Returns player's reward streak.
+     *
+     * @param player to find its streak
+     * @return number of reward streak
+     */
+    public abstract int getStreak(Player player);
+
+    /**
      * Sets new remaining time until the next reward.
      *
      * @param player to get his UUID
      * @param millis remaining time in milliseconds
      */
     public abstract void saveTime(Player player, long millis);
+
+    /**
+     * Sets new reward streak for player.
+     *
+     * @param player player to assign streak to
+     * @param streak new streak number
+     */
+    public abstract void saveStreak(Player player, int streak);
 
     /**
      * Creates User and saves in memory.

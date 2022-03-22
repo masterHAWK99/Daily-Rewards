@@ -25,6 +25,7 @@ public class FlatData extends Data {
             user.setCurrentIp(data.getString("data." + uuid + ".currentIp"));
             user.setCooldownOnIp(data.getLong("data." + uuid + ".cooldownOnIp"));
             user.setCooldown(data.getLong("data." + uuid + ".cooldown"));
+            user.setStreak(data.getInt("data." + uuid + ".streak"));
         }
     }
 
@@ -39,6 +40,11 @@ public class FlatData extends Data {
             return user.getCooldownOnIp();
         }
         return user.getCooldown();
+    }
+
+    @Override
+    public int getStreak(Player player) {
+        return getUsers().get(player.getUniqueId()).getStreak();
     }
 
     @Override
@@ -59,5 +65,15 @@ public class FlatData extends Data {
         }
 
         data.save();
+    }
+
+    @Override
+    public void saveStreak(Player player, int streak) {
+        User user = getUsers().get(player.getUniqueId());
+
+        data.set("data." + player.getUniqueId() + ".streak", streak);
+        data.save();
+
+        user.setStreak(streak);
     }
 }

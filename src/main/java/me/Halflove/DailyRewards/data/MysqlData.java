@@ -32,12 +32,30 @@ public class MysqlData extends Data {
 
         try (Connection connection = getConnection();
              PreparedStatement ps = connection.prepareStatement(
-                 "CREATE TABLE IF NOT EXISTS users(UUID VARCHAR(100), cooldown BIGINT(100), currentIp VARCHAR(100), cooldownOnIp BIGINT(100), PRIMARY KEY(UUID))")) {
+                 "CREATE TABLE IF NOT EXISTS users(UUID VARCHAR(100), cooldown BIGINT(100), currentIp VARCHAR(100), cooldownOnIp BIGINT(100), streak MEDIUMINT, PRIMARY KEY(UUID))")) {
             ps.executeUpdate();
             Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Daily Rewards MySQL: Data Tables Generated");
         } catch (SQLException e) {
             e.printStackTrace();
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Daily Rewards MySQL: Tables Failed To Generate");
+        }
+
+        boolean isStreakColumnExists = false;
+        try (ResultSet resultSet = getConnection().getMetaData().getColumns(null, null, "users", "streak")) {
+            isStreakColumnExists = resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (!isStreakColumnExists) {
+            try (Connection connection = getConnection();
+                 PreparedStatement preparedStatement = connection.prepareStatement("ALTER TABLE users "
+                     + "ADD COLUMN `streak` MEDIUMINT;")) {
+                preparedStatement.executeUpdate();
+                plugin.getLogger().info("Missing streak column added.");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         getUsers().clear();
@@ -56,6 +74,7 @@ public class MysqlData extends Data {
                 }
 
                 user.setCooldown(resultSet.getLong("cooldown"));
+                user.setStreak(resultSet.getInt("streak"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -79,6 +98,11 @@ public class MysqlData extends Data {
         return user.getCooldown();
     }
 
+    @Override
+    public int getStreak(Player player) {
+        return getUsers().get(player.getUniqueId()).getStreak();
+    }
+
     // TODO: find a better way to store long SQL queries
     @Override
     public void saveTime(Player player, long millis) {
@@ -88,7 +112,9 @@ public class MysqlData extends Data {
                 String hostAddress = player.getAddress().getAddress().getHostAddress();
 
                 try (Connection connection = getConnection();
-                     PreparedStatement statement = connection.prepareStatement("INSERT INTO users SET uuid = ?, cooldownOnIp = ?, currentIp = ? ON DUPLICATE KEY UPDATE currentIp = VALUES(currentIp), "
+                     PreparedStatement statement = connection.prepareStatement("INSERT INTO users "
+                         + "SET uuid = ?, cooldownOnIp = ?, currentIp = ? "
+                         + "ON DUPLICATE KEY UPDATE currentIp = VALUES(currentIp), "
                          + "cooldownOnIp = VALUES(cooldownOnIp)")) {
                     statement.setString(1, player.getUniqueId().toString());
                     statement.setLong(2, millis);
@@ -102,7 +128,9 @@ public class MysqlData extends Data {
             } else {
                 try (Connection connection = getConnection();
                      PreparedStatement statement = connection
-                         .prepareStatement("INSERT INTO users SET uuid = ?, cooldown = ? ON DUPLICATE KEY UPDATE cooldown = VALUES(cooldown)");
+                         .prepareStatement("INSERT INTO users "
+                             + "SET uuid = ?, cooldown = ? "
+                             + "ON DUPLICATE KEY UPDATE cooldown = VALUES(cooldown)")
                 ) {
 
                     statement.setString(1, player.getUniqueId().toString());
@@ -116,6 +144,29 @@ public class MysqlData extends Data {
         } catch (SQLException e) {
             e.printStackTrace();
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "MySQL Data failed to update!");
+        }
+    }
+
+    @Override
+    public void saveStreak(Player player, int streak) {
+        User user = getUsers().get(player.getUniqueId());
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection
+                 .prepareStatement("INSERT INTO users "
+                     + "SET uuid = ?, streak = ? "
+                     + "ON DUPLICATE KEY UPDATE streak = VALUES(streak)")
+        ) {
+
+            statement.setString(1, player.getUniqueId().toString());
+            statement.setInt(2, streak);
+
+            statement.executeUpdate();
+
+            user.setStreak(streak);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            plugin.getLogger().severe("MySQL Data failed to update!");
         }
     }
 }

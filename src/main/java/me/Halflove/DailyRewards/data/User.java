@@ -7,6 +7,8 @@ public class User {
 
     private String currentIp;
 
+    private int streak;
+
     public long getCooldown() {
         return cooldown;
     }
@@ -29,5 +31,13 @@ public class User {
 
     public void setCurrentIp(String currentIp) {
         this.currentIp = currentIp;
+    }
+
+    public int getStreak() {
+        return streak;
+    }
+
+    public void setStreak(int streak) {
+        this.streak = streak;
     }
 }
