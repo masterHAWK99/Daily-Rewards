@@ -3,8 +3,8 @@ package me.Halflove.DailyRewards;
 import me.Halflove.DailyRewards.command.AdminCommands;
 import me.Halflove.DailyRewards.command.RewardCommands;
 import me.Halflove.DailyRewards.data.Data;
+import me.Halflove.DailyRewards.hook.PlaceholderApiHook;
 import me.Halflove.DailyRewards.listener.PlayerJoinListener;
-import me.Halflove.DailyRewards.manager.PAPIExtensions;
 import me.Halflove.DailyRewards.manager.SettingsManager;
 import me.Halflove.DailyRewards.manager.UpdateChecker;
 import me.Halflove.DailyRewards.util.MessageUtils;
@@ -13,8 +13,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
-
-    public static boolean papi;
 
     private SettingsManager settings;
 
@@ -32,12 +30,7 @@ public class Main extends JavaPlugin {
 
         registerEvents();
 
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            papi = true;
-            new PAPIExtensions(this).register();
-        } else {
-            papi = false;
-        }
+        PlaceholderApiHook.initialize(this);
 
         updateChecker = new UpdateChecker(this);
         updateChecker.runCheckVersionTask();

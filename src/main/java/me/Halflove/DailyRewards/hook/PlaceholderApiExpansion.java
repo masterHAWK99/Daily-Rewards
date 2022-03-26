@@ -1,23 +1,16 @@
-package me.Halflove.DailyRewards.manager;
+package me.Halflove.DailyRewards.hook;
 
 import me.Halflove.DailyRewards.Main;
 import me.Halflove.DailyRewards.util.DateUtils;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
-public class PAPIExtensions extends PlaceholderExpansion {
-    private Main plugin;
+public class PlaceholderApiExpansion extends PlaceholderExpansion {
 
-    public PAPIExtensions(Main plugin) {
+    private final Main plugin;
+
+    public PlaceholderApiExpansion(Main plugin) {
         this.plugin = plugin;
-    }
-
-    public boolean persist() {
-        return true;
-    }
-
-    public boolean canRegister() {
-        return true;
     }
 
     public String getAuthor() {

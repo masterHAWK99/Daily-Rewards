@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Random;
 import me.Halflove.DailyRewards.Main;
 import me.Halflove.DailyRewards.config.DefaultConfig;
+import me.Halflove.DailyRewards.hook.PlaceholderApiHook;
 import me.Halflove.DailyRewards.util.MessageUtils;
-import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -46,9 +46,7 @@ public class RewardManager {
 
             String claim = reward.message;
             claim = claim.replace("%name%", reward.name);
-            if (Main.papi) {
-                claim = PlaceholderAPI.setPlaceholders(player, claim);
-            }
+            claim = PlaceholderApiHook.replacePlaceholders(player, claim);
             sendMessageWithPrefix(player, claim);
             if (!reward.broadcastMessage.equalsIgnoreCase("")) {
                 String msg = reward.broadcastMessage;
@@ -62,9 +60,7 @@ public class RewardManager {
                         int index = RewardManager.r.nextInt(commandList.size());
                         String selectedCommand = commandList.get(index);
                         selectedCommand = selectedCommand.replace("%player", player.getName());
-                        if (Main.papi) {
-                            selectedCommand = PlaceholderAPI.setPlaceholders(player, selectedCommand);
-                        }
+                        selectedCommand = PlaceholderApiHook.replacePlaceholders(player, selectedCommand);
                         if (selectedCommand.contains(";")) {
                             List<String> split = Splitter.on(";").splitToList(selectedCommand);
                             for (String finalcommand : split) {
@@ -76,9 +72,7 @@ public class RewardManager {
                     } else {
                         for (String selectedCommand : reward.commands) {
                             selectedCommand = selectedCommand.replace("%player", player.getName());
-                            if (Main.papi) {
-                                selectedCommand = PlaceholderAPI.setPlaceholders(player, selectedCommand);
-                            }
+                            selectedCommand = PlaceholderApiHook.replacePlaceholders(player, selectedCommand);
                             if (selectedCommand.contains(";")) {
                                 List<String> split = Splitter.on(";").splitToList(selectedCommand);
                                 for (String finalcommand : split) {

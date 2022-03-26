@@ -1,11 +1,10 @@
 package me.Halflove.DailyRewards.command;
 
 import me.Halflove.DailyRewards.Main;
-import me.Halflove.DailyRewards.data.Data;
+import me.Halflove.DailyRewards.hook.PlaceholderApiHook;
 import me.Halflove.DailyRewards.manager.RewardManager;
 import me.Halflove.DailyRewards.util.DateUtils;
 import me.Halflove.DailyRewards.util.MessageUtils;
-import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -31,9 +30,7 @@ public class RewardCommands implements CommandExecutor {
             RewardManager.noReward(player);
         } else {
             String msg = plugin.getSettings().getMessagesConfig().noPermission;
-            if (Main.papi) {
-                msg = PlaceholderAPI.setPlaceholders(player, msg);
-            }
+            msg = PlaceholderApiHook.replacePlaceholders(player, msg);
             msg = msg.replace("%player", player.getName());
             MessageUtils.sendMessageWithPrefix(player, msg);
         }
@@ -43,9 +40,7 @@ public class RewardCommands implements CommandExecutor {
 
     private void noRewardsMessage(Player player, long millis) {
         String norewards = plugin.getSettings().getMessagesConfig().noRewards;
-        if (Main.papi) {
-            norewards = PlaceholderAPI.setPlaceholders(player, norewards);
-        }
+        norewards = PlaceholderApiHook.replacePlaceholders(player, norewards);
         MessageUtils.sendMessageWithPrefix(player, norewards);
 
         String cdmsg = plugin.getSettings().getMessagesConfig().cooldown;
@@ -53,10 +48,7 @@ public class RewardCommands implements CommandExecutor {
         cdmsg = cdmsg.replace("%s%", DateUtils.getRemainingSec(millis));
         cdmsg = cdmsg.replace("%m%", DateUtils.getRemainingMin(millis));
         cdmsg = cdmsg.replace("%h%", DateUtils.getRemainingHour(millis));
-
-        if (Main.papi) {
-            cdmsg = PlaceholderAPI.setPlaceholders(player, cdmsg);
-        }
+        cdmsg = PlaceholderApiHook.replacePlaceholders(player, cdmsg);
         MessageUtils.sendMessageWithPrefix(player, cdmsg);
     }
 }

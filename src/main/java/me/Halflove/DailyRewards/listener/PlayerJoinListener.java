@@ -1,10 +1,10 @@
 package me.Halflove.DailyRewards.listener;
 
 import me.Halflove.DailyRewards.Main;
+import me.Halflove.DailyRewards.hook.PlaceholderApiHook;
 import me.Halflove.DailyRewards.manager.RewardManager;
 import me.Halflove.DailyRewards.util.DateUtils;
 import me.Halflove.DailyRewards.util.MessageUtils;
-import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -44,9 +44,7 @@ public class PlayerJoinListener implements Listener {
                             return;
                         }
                         String norewards = plugin.getSettings().getMessagesConfig().noRewards;
-                        if (Main.papi) {
-                            norewards = PlaceholderAPI.setPlaceholders(player, norewards);
-                        }
+                        norewards = PlaceholderApiHook.replacePlaceholders(player, norewards);
                         MessageUtils.sendMessageWithPrefix(player, norewards);
 
                         long millis = plugin.getData().getTime(player) - System.currentTimeMillis();
@@ -55,10 +53,7 @@ public class PlayerJoinListener implements Listener {
                         cdmsg = cdmsg.replace("%s%", DateUtils.getRemainingSec(millis));
                         cdmsg = cdmsg.replace("%m%", DateUtils.getRemainingMin(millis));
                         cdmsg = cdmsg.replace("%h%", DateUtils.getRemainingHour(millis));
-
-                        if (Main.papi) {
-                            cdmsg = PlaceholderAPI.setPlaceholders(player, cdmsg);
-                        }
+                        cdmsg = PlaceholderApiHook.replacePlaceholders(player, cdmsg);
                         MessageUtils.sendMessageWithPrefix(player, cdmsg);
                         RewardManager.noReward(player);
                     } else {
@@ -73,9 +68,7 @@ public class PlayerJoinListener implements Listener {
             (new BukkitRunnable() {
                 public void run() {
                     String available = plugin.getSettings().getMessagesConfig().rewardAvailable;
-                    if (Main.papi) {
-                        available = PlaceholderAPI.setPlaceholders(player, available);
-                    }
+                    available = PlaceholderApiHook.replacePlaceholders(player, available);
                     MessageUtils.sendMessageWithPrefix(player, available);
                 }
             }).runTaskLater(plugin, 50L);
