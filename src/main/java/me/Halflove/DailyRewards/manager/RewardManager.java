@@ -15,11 +15,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class RewardManager {
+
     private static final Random r = new Random();
+    private final Main plugin;
 
-    static Main plugin = Main.getPlugin(Main.class);
+    public RewardManager(Main plugin) {
+        this.plugin = plugin;
+    }
 
-    public static void noReward(Player player) {
+    public void noReward(Player player) {
         String sound = plugin.getSettings().getConfiguration().noRewardSound.type;
         float volume = plugin.getSettings().getConfiguration().noRewardSound.volume;
         float pitch = plugin.getSettings().getConfiguration().noRewardSound.pitch;
@@ -28,7 +32,7 @@ public class RewardManager {
         }
     }
 
-    public static void setReward(final Player player) {
+    public void setReward(final Player player) {
         String sound = plugin.getSettings().getConfiguration().claimSound.type;
         float volume = plugin.getSettings().getConfiguration().claimSound.volume;
         float pitch = plugin.getSettings().getConfiguration().claimSound.pitch;

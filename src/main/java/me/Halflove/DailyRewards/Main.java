@@ -5,6 +5,7 @@ import me.Halflove.DailyRewards.command.RewardCommands;
 import me.Halflove.DailyRewards.data.Data;
 import me.Halflove.DailyRewards.hook.PlaceholderApiHook;
 import me.Halflove.DailyRewards.listener.PlayerJoinListener;
+import me.Halflove.DailyRewards.manager.RewardManager;
 import me.Halflove.DailyRewards.manager.SettingsManager;
 import me.Halflove.DailyRewards.manager.UpdateChecker;
 import me.Halflove.DailyRewards.util.MessageUtils;
@@ -20,10 +21,14 @@ public class Main extends JavaPlugin {
 
     private UpdateChecker updateChecker;
 
+    private RewardManager rewardManager;
+
     public void onEnable() {
         settings = new SettingsManager(this);
 
         data = Data.getDataProvider(this);
+
+        rewardManager = new RewardManager(this);
 
         getCommand("dailyrewards").setExecutor(new AdminCommands(this));
         getCommand("reward").setExecutor(new RewardCommands(this));
@@ -50,6 +55,10 @@ public class Main extends JavaPlugin {
 
     public UpdateChecker getUpdateChecker() {
         return updateChecker;
+    }
+
+    public RewardManager getRewardManager() {
+        return rewardManager;
     }
 
     private void registerEvents() {

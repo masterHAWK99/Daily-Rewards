@@ -21,13 +21,14 @@ public class RewardCommands implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Player player = (Player) sender;
 
+        RewardManager rewardManager = plugin.getRewardManager();
         if (player.hasPermission("dr.claim")) {
             if (System.currentTimeMillis() > plugin.getData().getTime(player)) {
-                RewardManager.setReward(player);
+                rewardManager.setReward(player);
                 return true;
             }
             noRewardsMessage(player, plugin.getData().getTime(player) - System.currentTimeMillis());
-            RewardManager.noReward(player);
+            rewardManager.noReward(player);
         } else {
             String msg = plugin.getSettings().getMessagesConfig().noPermission;
             msg = PlaceholderApiHook.replacePlaceholders(player, msg);

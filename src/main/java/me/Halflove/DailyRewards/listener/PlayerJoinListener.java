@@ -39,8 +39,9 @@ public class PlayerJoinListener implements Listener {
             (new BukkitRunnable() {
                 public void run() {
                     if (player.hasPermission("dr.claim")) {
+                        RewardManager rewardManager = plugin.getRewardManager();
                         if (System.currentTimeMillis() > plugin.getData().getTime(player)) {
-                            RewardManager.setReward(player);
+                            rewardManager.setReward(player);
                             return;
                         }
                         String norewards = plugin.getSettings().getMessagesConfig().noRewards;
@@ -55,7 +56,7 @@ public class PlayerJoinListener implements Listener {
                         cdmsg = cdmsg.replace("%h%", DateUtils.getRemainingHour(millis));
                         cdmsg = PlaceholderApiHook.replacePlaceholders(player, cdmsg);
                         MessageUtils.sendMessageWithPrefix(player, cdmsg);
-                        RewardManager.noReward(player);
+                        rewardManager.noReward(player);
                     } else {
                         String msg = plugin.getSettings().getMessagesConfig().noPermission;
                         msg = msg.replace("%player", player.getName());
